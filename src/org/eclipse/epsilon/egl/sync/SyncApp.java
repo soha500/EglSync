@@ -22,7 +22,7 @@ public class SyncApp {
 		model.setStoredOnDisposal(true);
 		model.load();
 		
-		// Getting an element from an ID
+		// Getting an element from an ID   
 		Object openState = model.getElementById("_a7rXYF25EeiOVIR7pFwT6g");
 		System.out.println(openState);
 		

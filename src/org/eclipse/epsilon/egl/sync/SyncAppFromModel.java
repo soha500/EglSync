@@ -10,6 +10,7 @@ import org.eclipse.epsilon.eol.exceptions.models.EolModelLoadingException;
 
 public class SyncAppFromModel {
 
+	
 	public static void main(String[] args) throws EolModelLoadingException, IOException {
 		
 		String line = null;

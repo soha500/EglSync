@@ -13,6 +13,8 @@ public class App {
 		factory.setOutputRoot(new File("gen").getAbsolutePath());
 		EgxModule module = new EgxModule(factory);
 		module.parse(new File("statemachine2java.egx"));
+		//test comment
+		
 		
 		EmfModel model = new EmfModel();
 		model.setName("M");
