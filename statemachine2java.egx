@@ -1,8 +1,0 @@
-rule StateMachine2Java 
-	transform s : StateMachine {
-
-	template : "statemachine2java.egl"
-
-	target : "src/" + s.name + ".java"
-	
-}

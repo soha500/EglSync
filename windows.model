@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="ASCII"?>
-<statemachine:StateMachine xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:statemachine="statemachine" xsi:schemaLocation="statemachine statemachine.ecore" xmi:id="_aAaB8F25EeiOVIR7pFwT6g" name="Windows">
-  <states xmi:id="_a7rXYF25EeiOVIR7pFwT6g" name="open" outgoing="_qAFxwF25EeiOVIR7pFwT6g" incoming="_vfziwF25EeiOVIR7pFwT6g" action="Hello from Java"/>
-  <states xmi:id="_cuPhMF25EeiOVIR7pFwT6g" name="closed" outgoing="_vfziwF25EeiOVIR7pFwT6g" incoming="_qAFxwF25EeiOVIR7pFwT6g" action="System.out.println(&quot;Too cold! Closing windows&quot;);"/>
-  <transitions xmi:id="_qAFxwF25EeiOVIR7pFwT6g" condition="temp &lt; 20" source="_a7rXYF25EeiOVIR7pFwT6g" target="_cuPhMF25EeiOVIR7pFwT6g"/>
-  <transitions xmi:id="_vfziwF25EeiOVIR7pFwT6g" condition="temp >= 20" source="_cuPhMF25EeiOVIR7pFwT6g" target="_a7rXYF25EeiOVIR7pFwT6g"/>
-  <variables xmi:id="_zLxMQF27EeiOVIR7pFwT6g" name="temp" type="int"/>
-</statemachine:StateMachine>
