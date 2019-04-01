@@ -23,7 +23,7 @@ public class SyncAppFromModelDemo { // An object class
 	public SyncAppFromModelDemo() {
 		try {
 
-			fIn = new FileInputStream("/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/example.txt");
+			fIn = new FileInputStream("example.txt");
 			bRead = new BufferedReader(new InputStreamReader(fIn));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -104,8 +104,8 @@ public class SyncAppFromModelDemo { // An object class
 		
 		EmfModel model = new EmfModel();
 		model.setName("M");
-		model.setMetamodelFile(new File("/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/Statemachine.ecore").getAbsolutePath());
-		model.setModelFile(new File("/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/Statemachine.model").getAbsolutePath());
+		model.setMetamodelFile(new File("Statemachine.ecore").getAbsolutePath());
+		model.setModelFile(new File("Statemachine.model").getAbsolutePath());
 		model.setReadOnLoad(true);
 		model.setStoredOnDisposal(true);
 		model.load();
