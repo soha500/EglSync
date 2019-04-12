@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ASCII"?>
 <statemachine:Statemachine xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:statemachine="statemachine" xsi:schemaLocation="statemachine Statemachine.ecore" xmi:id="_kcT6gDUdEemrVIiex_kxBw" name="Window">
-  <states xmi:id="_l5GBkDUdEemrVIiex_kxBw" name="open"/>
-  <states xmi:id="_A88pcDUeEemrVIiex_kxBw" name="closed" action="temp >= 35;temp = 45;temp = 65;"/>
+  <states xmi:id="_l5GBkDUdEemrVIiex_kxBw" name="now is open state "/>
+  <states xmi:id="_A88pcDUeEemrVIiex_kxBw" name="closed" action="temp >= 50;"/>
   <states xmi:id="_C9NRADUeEemrVIiex_kxBw" name="equal"/>
   <transitions xmi:id="_FM_iUDUeEemrVIiex_kxBw" condition="temp = 20"/>
   <transitions xmi:id="_oQ4YUDUdEemrVIiex_kxBw" condition="temp >= 20"/>

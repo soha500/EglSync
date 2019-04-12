@@ -27,9 +27,9 @@ public class Synchronization {
 		return content;
 	}
 
-	public void setContent(String contentCopy) {
+	public void addContent(String contentCopy) {
 		this.content += contentCopy;
-		
+
 	}
 
 	public Synchronization(String idCopy, String attributeCopy) { // , String contentCopy
@@ -37,15 +37,4 @@ public class Synchronization {
 		attribute = attributeCopy;
 		content = "";
 	}
-
-	
-	//	public Synchronization(String contentCopy) { // , String contentCopy
-//		content = contentCopy;
-//	}
-
-
 }
-//public void updatecontent(String Updatecontent)
-//{
-//	this.Updatecontent = Updatecontent;
-//}

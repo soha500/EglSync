@@ -3,8 +3,7 @@ I am in the first line
 I am in the second line
 
 //sync _l5GBkDUdEemrVIiex_kxBw, name
-open
-
+close
 //endsync 
 
 Nothing important here
