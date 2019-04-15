@@ -1,7 +1,11 @@
 package org.eclipse.epsilon.egl.sync;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,93 +14,104 @@ import org.eclipse.epsilon.emc.emf.EmfModel;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eol.exceptions.models.EolModelLoadingException;
 import org.eclipse.epsilon.eol.execute.introspection.IPropertySetter;
+import org.eclipse.epsilon.eol.models.IModel;
 
-public class Tasks extends SyncReader {
+public class FileSync {
 
-	public Tasks(String fileName) {
-		super(fileName);
-
-	}
-
-	public void readAllFiles() {
-		System.out.println('\n' + "Task 1" + " Read and print all the files in the folder: " + '\n');
-		StringBuilder sb = new StringBuilder();
-		
+	public FileSync(String fileName, IModel model) {
 		try {
-			while (true) {
-				String generatedFile = this.bRead.readLine();
-
-				if (generatedFile == null) {
-					this.read();
-					break;
-				}
-
-				sb.append(' ').append(generatedFile);
-
-				System.out.println(generatedFile);
-
-			}
-		} catch (IOException ex) {
-			System.out.println("Can't read file.");
+			this.model = model;
+			fIn = new FileInputStream(fileName);
+			bRead = new BufferedReader(new InputStreamReader(fIn));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		}
 
 	}
 
-	public void printSyncLines() {
-		System.out.println('\n' + "Task 2" + " Identify all //sync and //endsync lines in all files in the folder (Only): " + '\n');
-		String line;
+	FileInputStream fIn;
+	public BufferedReader bRead;
+	public IModel model;
 
+
+	public void reusefile() {
 		try {
-			while ((line = this.bRead.readLine()) != null) {
-				if (line.contains("//sync")) {
-					System.out.println(line);
-				}
-				if (line.contains("//endsync")) {
-					System.out.println(line);
-				}
-			}
+			fIn.getChannel().position(0);
+			bRead = new BufferedReader(new InputStreamReader(fIn));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 	}
 
-	public void getSyncContent() {
-		System.out.println('\n' + "Task 3" + " Printing the content between //sync and //endsync in all files in the folder: " + '\n');
+//	public void readAllFiles() {
+//		System.out.println('\n' + "Task 1" + " Read and print all the files in the folder: " + '\n');
+//		StringBuilder sb = new StringBuilder();
+//
+//		try {
+//			while (true) {
+//				String generatedFile = this.bRead.readLine();
+//
+//				if (generatedFile == null) {
+//					break;
+//				}
+//
+//				sb.append(' ').append(generatedFile);
+//
+//				System.out.println(generatedFile);
+//
+//			}
+//		} catch (IOException ex) {
+//			System.out.println("Can't read file.");
+//		}
+//
+//	}
+//
+//	public void printSyncLines() {
+//		System.out.println('\n' + "Task 2" + " Identify all //sync and //endsync lines in all files in the folder (Only): " + '\n');
+//		String line;
+//		this.reusefile();
+//
+//		try {
+//			while ((line = this.bRead.readLine()) != null) {
+//				if (line.contains("//sync")) {
+//					System.out.println(line);
+//				}
+//				if (line.contains("//endsync")) {
+//					System.out.println(line);
+//				}
+//			}
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
+//
+//	public void getSyncContent() {
+//		System.out.println('\n' + "Task 3" + " Printing the content between //sync and //endsync in all files in the folder: " + '\n');
+//
+//		String content = null;
+//
+//		this.reusefile();
+//		try {
+//			while ((content = this.bRead.readLine()) != null) {
+//				if (content.contains("//sync")) {
+//					while (!(content = this.bRead.readLine()).contains("//endsync"))
+//						System.out.println(content);
+//
+//					System.out.println();
+//				}
+//			}
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
-		String content = null;
-
-		this.read();
-		try {
-			while ((content = this.bRead.readLine()) != null) {
-				if (content.contains("//sync")) {
-					while (!(content = this.bRead.readLine()).contains("//endsync"))
-						System.out.println(content);
-
-					System.out.println();
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void updateModel(List<Synchronization> listObjects) {
+	public void updateModel() {
 		System.out.println('\n' + "Task 4" + " Update the respective attribute of the model element where it comes from: " + '\n');
 
-		EmfModel model = new EmfModel();
-		model.setName("M");
-		model.setMetamodelFile(new File("Statemachine.ecore").getAbsolutePath());
-		model.setModelFile(new File("Statemachine.model").getAbsolutePath());
-		model.setReadOnLoad(true);
-		model.setStoredOnDisposal(true);
-		
-		try {
-			model.load();
-		} catch (EolModelLoadingException e2) {
-			e2.printStackTrace();
-		}
 
-		this.read();
+
+		this.reusefile();
 
 		while (true) {
 			String generatedLine = null;
@@ -128,7 +143,7 @@ public class Tasks extends SyncReader {
 					e1.printStackTrace();
 				}
 
-				listObjects.add(sync);
+				//listObjects.add(sync);
 
 				Object modelElement = model.getElementById(sync.getId());
 
