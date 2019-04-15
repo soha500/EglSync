@@ -28,6 +28,8 @@ public class FileSync {
 		}
 
 	}
+	
+	// Checking Git history
 
 	FileInputStream fIn;
 	public BufferedReader bRead;
