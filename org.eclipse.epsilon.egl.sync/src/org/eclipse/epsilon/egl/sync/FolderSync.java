@@ -50,8 +50,7 @@ public class FolderSync {
 				boolean result = tasks.getSyncs();
 				if (result != true) {
 					System.out.println(
-							"Sorry..!! there is consistent value of the same property in some sync regions, so the model cannot be updated.");
-					
+							"Sorry..!! there is consistent value of the same property in some sync regions, so the model cannot be updated.");	
 
 				} else {
 					for (Synchronization sync : syncLists) {

@@ -2,6 +2,7 @@ package org.eclipse.epsilon.egl.sync;
 
 public class Synchronization {
 
+	
 	String id;
 	String attribute;
 	String content;

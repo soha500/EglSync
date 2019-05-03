@@ -11,7 +11,6 @@ public class SyncAppFromModel {
 	private static final String FOLDER_PATH ="/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/All-Generated-Files";
 
 	public static void main(String[] args) throws EolModelLoadingException, IOException {
-
 		//List<Synchronization> listObjects = new ArrayList<Synchronization>();
 		
 		EmfModel model = new EmfModel();

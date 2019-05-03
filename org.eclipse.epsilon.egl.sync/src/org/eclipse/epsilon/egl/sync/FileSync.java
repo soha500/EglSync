@@ -41,7 +41,6 @@ public class FileSync {
 		}
 
 	}
-
 	// Find all the sync regions
 	public boolean getSyncs() {
 

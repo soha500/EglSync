@@ -8,3 +8,4 @@
   <transitions xmi:id="_r606gDUdEemrVIiex_kxBw" condition="temp &lt; 20"/>
   <variables xmi:id="_IWwvoDUeEemrVIiex_kxBw" name="temp"/>
 </statemachine:Statemachine>
+
