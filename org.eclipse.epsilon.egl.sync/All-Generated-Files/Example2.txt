@@ -1,6 +1,15 @@
-Nothing important here
+I am in the first line example2
+I am in the second line example2
 
-//sync _A88pcDUeEemrVIiex_kxBw, action
-temp >= 50;
+//sync _l5GBkDUdEemrVIiex_kxBw, action
+ 
+state b
 
 //endsync
+
+//sync _A88pcDUeEemrVIiex_kxBw, action
+
+state c
+
+//endsync
+
