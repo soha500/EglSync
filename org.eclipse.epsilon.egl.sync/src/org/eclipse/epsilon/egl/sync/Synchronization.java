@@ -5,7 +5,6 @@ public class Synchronization {
 	String id;
 	String attribute;
 	String content;
-	String updatecontent;
 
 	public String getId() {
 		return id;
