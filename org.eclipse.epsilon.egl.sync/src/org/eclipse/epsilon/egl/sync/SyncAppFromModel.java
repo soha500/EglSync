@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.eclipse.epsilon.emc.emf.EmfModel;
 import org.eclipse.epsilon.eol.exceptions.models.EolModelLoadingException;
 
+
 public class SyncAppFromModel {
 
 	private static final String FOLDER_PATH ="/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/All-Generated-Files";

@@ -52,6 +52,7 @@ public class FolderSync {
 					System.out.println(
 							"Sorry..!! there is consistent value of the same property in some sync regions, so the model cannot be updated.");	
 
+					
 				} else {
 					for (Synchronization sync : syncLists) {
 						Object modelElement = model.getElementById(sync.getId());

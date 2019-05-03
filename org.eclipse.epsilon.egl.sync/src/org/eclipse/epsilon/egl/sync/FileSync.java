@@ -41,7 +41,7 @@ public class FileSync {
 		}
 
 	}
-	// Find all the sync regions
+	/// Find all the sync regions
 	public boolean getSyncs() {
 
 		this.reusefile();
