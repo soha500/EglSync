@@ -77,8 +77,7 @@ public class FolderSync {
 				if (modelAttribute.equals(modelContent)) {
 //				if ( modelElement.equals(sync.getId()) && modelAttribute.equals(sync.getAttribute())&& ! (modelContent.equals(sync.getContent()))) {
 
-
-					//System.out.println("Sorry! there are two different values..");
+					// System.out.println("Sorry! there are two different values.");
 
 				} else {
 					Object modelElement1 = model.getElementById(sync.getId());
@@ -92,13 +91,13 @@ public class FolderSync {
 						e.printStackTrace();
 					}
 
-					//System.out.println(sync.getId());
-					//System.out.println(sync.getAttribute());
+					// System.out.println(sync.getId());
+					// System.out.println(sync.getAttribute());
 					System.out.println(sync.getContent());
 
 					model.store();
 
-					System.out.println("the value of proprity have been updated");
+					System.out.println("the value of property have been updated");
 					return;
 				}
 

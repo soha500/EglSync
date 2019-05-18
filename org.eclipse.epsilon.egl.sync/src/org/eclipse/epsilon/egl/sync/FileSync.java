@@ -38,7 +38,6 @@ public class FileSync {
 		}
 
 	}
-
 	// Find all the sync regions
 	public ArrayList<Synchronization> getAllTheSyncRegionsOfTheFile() {
 		ArrayList<Synchronization> allTheSyncRegionsInTheFile = new ArrayList<Synchronization>();
@@ -82,4 +81,3 @@ public class FileSync {
 		return allTheSyncRegionsInTheFile;
 	}
 }
-
