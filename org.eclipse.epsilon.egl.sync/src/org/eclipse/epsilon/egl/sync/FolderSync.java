@@ -11,18 +11,15 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
+import org.eclipse.epsilon.eol.execute.introspection.IPropertyGetter;
 import org.eclipse.epsilon.eol.execute.introspection.IPropertySetter;
 import org.eclipse.epsilon.eol.models.IModel;
 
 public class FolderSync {
 
-	public void sync(String folder, IModel model) {
+	public List<Synchronization> getAllTheSyncsRegionsOfTheFolder(String folder) {
+
 		Path folderPath = Paths.get(folder);
-
-		// create data structure for all files's names and contents in the folder
-		Map<String, List<String>> namesAndContents = new TreeMap<String, List<String>>();
-
-		List<Synchronization> syncLists = new ArrayList<Synchronization>();
 
 		// call all list of the files in the folder
 		List<String> fileNames = new ArrayList<>();
@@ -36,7 +33,11 @@ public class FolderSync {
 			ex.printStackTrace();
 		}
 
-		// go through the list of files in folder..
+		// create data structure for all files's names and contents in the folder
+		Map<String, List<String>> namesAndContents = new TreeMap<String, List<String>>();
+
+		List<Synchronization> allTheSyncRegionsInTheFolder = new ArrayList<Synchronization>();
+
 		for (String file : fileNames) {
 			System.out.println("the filename is :" + file);
 
@@ -45,33 +46,9 @@ public class FolderSync {
 				List<String> content = Files.readAllLines(folderPath.resolve(file));
 				namesAndContents.put(file, content);
 
-				FileSync tasks = new FileSync(file, model, syncLists);
-
-				boolean result = tasks.getSyncs();
-				if (result != true) {
-					System.out.println(
-							"Sorry..!! there is consistent value of the same property in some sync regions, so the model cannot be updated.");	
-
-					
-				} else {
-					for (Synchronization sync : syncLists) {
-						Object modelElement = model.getElementById(sync.getId());
-
-						IPropertySetter propertySetter = model.getPropertySetter();
-						propertySetter.setObject(modelElement);
-						propertySetter.setProperty(sync.getAttribute());
-						try {
-							propertySetter.invoke(sync.getContent());
-						} catch (EolRuntimeException e) {
-							e.printStackTrace();
-						}
-
-						System.out.println(sync.getId());
-						System.out.println(sync.getAttribute());
-						System.out.println(sync.getContent());
-					}
-				}
-				model.store();
+				FileSync fileSync = new FileSync(file);
+				List<Synchronization> syncRegionsOfThisFile = fileSync.getAllTheSyncRegionsOfTheFile();
+				allTheSyncRegionsInTheFolder.addAll(syncRegionsOfThisFile);
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -79,8 +56,92 @@ public class FolderSync {
 			}
 
 		}
+		return allTheSyncRegionsInTheFolder;
 
 	}
+
+	public void checkSyncs(IModel model, List<Synchronization> allTheSyncsRegionOfTheFolder) {
+
+		IPropertyGetter propertyGetter = model.getPropertyGetter();
+
+		// IPropertySetter propertySetter = model.getPropertySetter();
+		// int count = 0 ;
+
+		for (Synchronization sync : allTheSyncsRegionOfTheFolder) {
+			Object modelElement = model.getElementById(sync.getId());
+			try {
+				String modelAttribute = (String) propertyGetter.invoke(modelElement, sync.getAttribute());
+
+				String modelContent = (String) sync.getContent();
+
+				if (modelAttribute.equals(modelContent)) {
+//				if ( modelElement.equals(sync.getId()) && modelAttribute.equals(sync.getAttribute())&& ! (modelContent.equals(sync.getContent()))) {
+
+
+					//System.out.println("Sorry! there are two different values..");
+
+				} else {
+					Object modelElement1 = model.getElementById(sync.getId());
+
+					IPropertySetter propertySetter1 = model.getPropertySetter();
+					propertySetter1.setObject(modelElement1);
+					propertySetter1.setProperty(sync.getAttribute());
+					try {
+						propertySetter1.invoke(sync.getContent());
+					} catch (EolRuntimeException e) {
+						e.printStackTrace();
+					}
+
+					//System.out.println(sync.getId());
+					//System.out.println(sync.getAttribute());
+					System.out.println(sync.getContent());
+
+					model.store();
+
+					System.out.println("the value of proprity have been updated");
+					return;
+				}
+
+			} catch (EolRuntimeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	public void updateTheModel(IModel model, List<Synchronization> allTheSyncsRegionOfTheFolder) {
+		IPropertyGetter propertyGetter = model.getPropertyGetter();
+		System.out.println("The value in the model now are:");
+
+		for (Synchronization sync : allTheSyncsRegionOfTheFolder) {
+			Object modelElement = model.getElementById(sync.getId());
+			try {
+				System.out.println(propertyGetter.invoke(modelElement, sync.getAttribute()));
+
+			} catch (EolRuntimeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		checkSyncs(model, allTheSyncsRegionOfTheFolder);
+
+	}
+
+	public void getSynchronization(String folder, IModel model) {
+
+		List<Synchronization> allTheSyncRegionsInTheFolder = new ArrayList<Synchronization>();
+
+		allTheSyncRegionsInTheFolder = getAllTheSyncsRegionsOfTheFolder(folder);
+
+		for (Synchronization sync : allTheSyncRegionsInTheFolder) {
+			System.out.println(sync.getId());
+			System.out.println(sync.getAttribute());
+			System.out.println(sync.getContent());
+		}
+
+		updateTheModel(model, allTheSyncRegionsInTheFolder);
+	}
+
 }
-
-

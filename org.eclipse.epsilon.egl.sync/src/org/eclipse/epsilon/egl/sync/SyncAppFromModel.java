@@ -28,9 +28,12 @@ public class SyncAppFromModel {
 		}
 		
 		FolderSync syncReader = new FolderSync();
-		syncReader.sync(FOLDER_PATH, model);
+		syncReader.getSynchronization(FOLDER_PATH, model);
 
 
 	}
 }
+
+
+
 
