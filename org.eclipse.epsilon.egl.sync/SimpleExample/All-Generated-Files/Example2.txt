@@ -1,15 +1,33 @@
-I am in the first line example2
-I am in the second line example2
 
-//sync _l5GBkDUdEemrVIiex_kxBw, action
- 
-state b
+Close..
+
+//sync _A88pcDUeEemrVIiex_kxBw, action 
+       
+y
+
+//endsync
+
+
+
+//sync _A88pcDUeEemrVIiex_kxBw, action 
+       
+b
 
 //endsync
 
-//sync _A88pcDUeEemrVIiex_kxBw, action
 
-state c
 
-//endsync
+
+
+
+
+
+
+
+
+
+
+
+
+
 
