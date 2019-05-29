@@ -8,8 +8,11 @@ import org.eclipse.epsilon.eol.exceptions.models.EolModelLoadingException;
 
 
 public class SyncAppFromModel {
+	//old one 
+	private static final String FOLDER_PATH ="/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/SimpleExample/All-Generated-Files";
+	//new one
+//	private static final String FOLDER_PATH ="/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/New-Generated-Files";
 
-	private static final String FOLDER_PATH ="/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/All-Generated-Files";
 
 	public static void main(String[] args) throws EolModelLoadingException, IOException {
 		//List<Synchronization> listObjects = new ArrayList<Synchronization>();
@@ -17,7 +20,13 @@ public class SyncAppFromModel {
 		EmfModel model = new EmfModel();
 		model.setName("M");
 		model.setMetamodelFile(new File("Statemachine.ecore").getAbsolutePath());
-		model.setModelFile(new File("Statemachine.model").getAbsolutePath());
+		//old one
+		model.setModelFile(new File("SimpleExample/models/Statemachine.model").getAbsolutePath());
+
+		// new one
+//		model.setModelFile(new File("Statemachine.model").getAbsolutePath());
+		
+
 		model.setReadOnLoad(true);
 		model.setStoredOnDisposal(true);
 

@@ -59,9 +59,13 @@ public class FileSync {
 			if (line.contains("//sync")) {
 
 				String[] idAndProperty = null;
+				//  "[^..]" // matches any single character not in brackets
+				//  "(.:?)" // matches all 
+				//  "\\s.\\w\\d\\w+.\\s\\w+"
+				//Pattern p = Pattern.compile("[^..]");
 
 				Pattern p = Pattern.compile("\\s.\\w\\d\\w+.\\s\\w+");
-				Matcher m = p.matcher(line);
+				Matcher m = p.matcher(line.trim());
 
 				if (m.find())
 					idAndProperty = (String[]) (m.group(0)).split(",");
@@ -69,7 +73,7 @@ public class FileSync {
 
 				try {
 					while (!(line = this.bRead.readLine()).contains("//endsync"))
-						sync.addContent(line);
+						sync.addContent(line.trim());
 
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -81,3 +85,28 @@ public class FileSync {
 		return allTheSyncRegionsInTheFile;
 	}
 }
+//if (line.contains("/*sync")) {
+//
+//	String[] idAndProperty = null;
+//	//  "[^..]" // matches any single character not in brackets 
+//	//  "\\s.\\w\\d\\w+.\\s\\w+"
+//
+//	Pattern p = Pattern.compile("[^..]");
+//	Matcher m = p.matcher(line);
+//
+//	if (m.find())
+//		idAndProperty = (String[]) (m.group(0)).split(",");
+//	Synchronization sync = new Synchronization(idAndProperty[0].trim(), idAndProperty[1].trim());
+//
+//	try {
+//		while (!(line = this.bRead.readLine()).contains("/*endsync"))
+//			sync.addContent(line);
+//
+//	} catch (IOException e1) {
+//		e1.printStackTrace();
+//	}
+//	allTheSyncRegionsInTheFile.add(sync);
+//
+//}
+
+//if (line.contains("//sync" || "/*sync")) {
