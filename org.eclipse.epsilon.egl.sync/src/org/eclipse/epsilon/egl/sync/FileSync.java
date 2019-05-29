@@ -85,6 +85,7 @@ public class FileSync {
 		return allTheSyncRegionsInTheFile;
 	}
 }
+
 //if (line.contains("/*sync")) {
 //
 //	String[] idAndProperty = null;

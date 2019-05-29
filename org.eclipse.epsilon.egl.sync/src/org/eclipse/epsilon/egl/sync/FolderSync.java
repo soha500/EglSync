@@ -99,7 +99,7 @@ public class FolderSync {
 	}
 
 	public void checkSyncs(IModel model, List<Synchronization> allTheSyncsRegionOfTheFolder) {
-
+		
 		// create a data structure
 		Map<String, Set<String>> valueInTheModel = new HashMap<String, Set<String>>();
 
@@ -166,7 +166,6 @@ public class FolderSync {
 							e.printStackTrace();
 						}
 						model.store();
-
 						//return;
 					}
 
