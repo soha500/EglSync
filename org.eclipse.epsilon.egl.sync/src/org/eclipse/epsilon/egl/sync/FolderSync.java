@@ -166,6 +166,9 @@ public class FolderSync {
 							e.printStackTrace();
 						}
 						model.store();
+						
+						
+						
 						//return;
 					}
 

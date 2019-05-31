@@ -55,14 +55,16 @@ public class FileSync {
 			if (line == null) {
 				break;
 			}
+			//  "[^..]" // matches any single character not in brackets
+			//  "(.:?)" // matches all 
+			//  "\\s.\\w\\d\\w+.\\s\\w+"
+			//Pattern p = Pattern.compile("[^..]  ");
 
 			if (line.contains("//sync")) {
+			
+				
 
 				String[] idAndProperty = null;
-				//  "[^..]" // matches any single character not in brackets
-				//  "(.:?)" // matches all 
-				//  "\\s.\\w\\d\\w+.\\s\\w+"
-				//Pattern p = Pattern.compile("[^..]");
 
 				Pattern p = Pattern.compile("\\s.\\w\\d\\w+.\\s\\w+");
 				Matcher m = p.matcher(line.trim());
@@ -80,6 +82,9 @@ public class FileSync {
 				}
 				allTheSyncRegionsInTheFile.add(sync);
 
+			} else if (line.contains("/*sync")) {
+				
+				
 			}
 		}
 		return allTheSyncRegionsInTheFile;

@@ -1,20 +1,50 @@
 
 Close..
 
-//sync _A88pcDUeEemrVIiex_kxBw, action 
-       
-y
-
-//endsync
-
-
-
+public class/*sync _5eSyYHe_EemrVZuAyqFicw, name */  Window /*endSync */{
+	
+	protected String state = "open";
+	public  temp;
+	
+	public void update() {
+		if (state.equalsIgnoreCase("open")) {
+			return;
+		}
+		if (state.equalsIgnoreCase("closed")) {
+			return;
+		}
+		public void open() {
+			this.state = "open";
 //sync _A88pcDUeEemrVIiex_kxBw, action 
        
 b
 
 //endsync
+			
+			
+			/* protected region open on begin */
+			 System.out.println("I am in open state");
+			/* protected region open end */
 
+
+	}
+		public void closed() {
+			this.state = "closed";
+//sync _A88pcDUeEemrVIiex_kxBw, action 
+       
+y
+
+//endsync
+			
+			
+			/* protected region closed on begin */
+			 System.out.println("I am in closed state");
+			/* protected region closed end */
+
+
+	}
+	
+}
 
 
 
