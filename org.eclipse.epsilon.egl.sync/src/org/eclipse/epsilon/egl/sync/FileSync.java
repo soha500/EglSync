@@ -38,6 +38,7 @@ public class FileSync {
 		}
 
 	}
+
 	// Find all the sync regions
 	public ArrayList<Synchronization> getAllTheSyncRegionsOfTheFile() {
 		ArrayList<Synchronization> allTheSyncRegionsInTheFile = new ArrayList<Synchronization>();
@@ -55,23 +56,18 @@ public class FileSync {
 			if (line == null) {
 				break;
 			}
-			//  "[^..]" // matches any single character not in brackets
-			//  "(.:?)" // matches all 
-			//  "\\s.\\w\\d\\w+.\\s\\w+"
-			//Pattern p = Pattern.compile("[^..]  ");
 
 			if (line.contains("//sync")) {
-			
-				
 
-				String[] idAndProperty = null;
+				String[] idAndAttribute1 = null;
 
-				Pattern p = Pattern.compile("\\s.\\w\\d\\w+.\\s\\w+");
+				Pattern p = Pattern.compile("(\\s\\w+.\\s\\w+.)"); // Ok
+
 				Matcher m = p.matcher(line.trim());
 
 				if (m.find())
-					idAndProperty = (String[]) (m.group(0)).split(",");
-				Synchronization sync = new Synchronization(idAndProperty[0].trim(), idAndProperty[1].trim());
+					idAndAttribute1 = (String[]) (m.group(0)).split(",");
+				Synchronization sync = new Synchronization(idAndAttribute1[0].trim(), idAndAttribute1[1].trim());
 
 				try {
 					while (!(line = this.bRead.readLine()).contains("//endsync"))
@@ -83,36 +79,59 @@ public class FileSync {
 				allTheSyncRegionsInTheFile.add(sync);
 
 			} else if (line.contains("/*sync")) {
-				
-				
+
+				// /*sync with extend 4 groups
+				if (line.contains("extends")) {
+
+					Pattern p = Pattern.compile("\\s(.+\\s*,\\s*\\w+)\\s*\\*\\/\\s(\\w+)\\s*\\/\\*\\s*endsync\\s*\\*\\/\\s+\\w+\\s+\\/\\*\\s*sync\\s+(.+\\s*,\\s*\\w+)\\s*\\*\\/\\s*(\\w+)\\s*\\/\\*\\s*endSync\\s*\\*\\/"); // One group without sync and endsync
+
+					Matcher m = p.matcher(line.trim());
+
+					if (m.find()) {
+						System.out.println(m.group(1));
+						System.out.println(m.group(2));
+						System.out.println(m.group(3));
+						System.out.println(m.group(4));
+
+						// matching before extend is saved in sync 1
+						String[] idAndAttribute1 = (String[]) (m.group(1)).split(",");
+						String content1 = m.group(2).trim();
+						Synchronization sync1 = new Synchronization(idAndAttribute1[0].trim(),
+								idAndAttribute1[1].trim(), content1);
+
+						// matching after extend is saved in sync 2
+						String[] idAndAttribute2 = (String[]) (m.group(3)).split(",");
+						String content2 = m.group(4).trim();
+						Synchronization sync2 = new Synchronization(idAndAttribute2[0].trim(),
+								idAndAttribute2[1].trim(), content2);
+
+						allTheSyncRegionsInTheFile.add(sync1);
+						allTheSyncRegionsInTheFile.add(sync2);
+					}
+
+				}
+				// /*sync without extend 3 groups
+				else {
+
+					final String regex = "\\/\\*\\s*sync\\s+(.+)\\s*,\\s*(\\w+)\\s*\\*\\/\\s*(\\w+)\\s*\\/\\*\\s*endsync\\s*\\*\\/";
+
+					final Pattern pattern = Pattern.compile(regex);
+					final Matcher matcher = pattern.matcher(line);
+
+					if (matcher.find()) {
+
+						String id = matcher.group(1).trim();
+						String attribute = matcher.group(2).trim();
+						String content = matcher.group(3).trim();
+
+						Synchronization sync = new Synchronization(id, attribute, content);
+
+						allTheSyncRegionsInTheFile.add(sync);
+					}
+				}
 			}
+
 		}
 		return allTheSyncRegionsInTheFile;
 	}
 }
-
-//if (line.contains("/*sync")) {
-//
-//	String[] idAndProperty = null;
-//	//  "[^..]" // matches any single character not in brackets 
-//	//  "\\s.\\w\\d\\w+.\\s\\w+"
-//
-//	Pattern p = Pattern.compile("[^..]");
-//	Matcher m = p.matcher(line);
-//
-//	if (m.find())
-//		idAndProperty = (String[]) (m.group(0)).split(",");
-//	Synchronization sync = new Synchronization(idAndProperty[0].trim(), idAndProperty[1].trim());
-//
-//	try {
-//		while (!(line = this.bRead.readLine()).contains("/*endsync"))
-//			sync.addContent(line);
-//
-//	} catch (IOException e1) {
-//		e1.printStackTrace();
-//	}
-//	allTheSyncRegionsInTheFile.add(sync);
-//
-//}
-
-//if (line.contains("//sync" || "/*sync")) {

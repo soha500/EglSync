@@ -1,53 +1,35 @@
 
-public class/*sync _5eSyYHe_EemrVZuAyqFicw, name */  Window /*endSync */{
-	
-	protected String state = "open";
-	public  temp;
-	
-	public void update() {
-		if (state.equalsIgnoreCase("open")) {
-			return;
-		}
-		if (state.equalsIgnoreCase("closed")) {
-			return;
-		}
-		public void open() {
-			this.state = "open";
-//sync _l5GBkDUdEemrVIiex_kxBw, action 
-       
-a
+/*sync _kcT6gDUdEemrVIiex_kxBw, name*/ WindowMain /*endsync*/ extends /*sync _kcT6gDUdEemrVIiex_kxBw, name*/ WindowExtends /*endsync*/{
 
-//endsync
-			
-			
-			/* protected region open on begin */
-			 System.out.println("I am in open state");
-			/* protected region open end */
+/*sync _kcT6gDUdEemrVIiex_kxBw, name*/ newName /*endsync*/{
 
 
-	}
-		public void closed() {
-			this.state = "closed";
 //sync _l5GBkDUdEemrVIiex_kxBw, action 
        
 x
 
 //endsync
+
+//sync _l5GBkDUdEemrVIiex_kxBw, action 
+       
+a
+
+//endsync
+
+
 			
-			
-			/* protected region closed on begin */
-			 System.out.println("I am in closed state");
-			/* protected region closed end */
 
+//sync _C9NRADUeEemrVIiex_kxBw, action 
+       
+z
 
-	}
-	
-}
+//endsync
 
-		
+//sync _C9NRADUeEemrVIiex_kxBw, action 
+       
+c
 
-	
-
+//endsync
 
 
 

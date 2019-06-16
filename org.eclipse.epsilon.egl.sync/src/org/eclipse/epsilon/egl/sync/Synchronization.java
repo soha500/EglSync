@@ -36,4 +36,9 @@ public class Synchronization {
 		attribute = attributeCopy;
 		content = "";
 	}
+	public Synchronization(String idCopy, String attributeCopy, String contentCopy) { // , String contentCopy
+		id = idCopy;
+		attribute = attributeCopy;
+		content = contentCopy;
+	}
 }
