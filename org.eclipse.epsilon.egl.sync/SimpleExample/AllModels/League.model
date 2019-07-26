@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ASCII"?>
+<league:League xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:league="league" xmi:id="_OBx88KRUEemMKZVsE_d7nA" name="Premier League ">
+  <teams xmi:id="_Sy6wsKRUEemMKZVsE_d7nA" name="Manchester">
+    <coach xmi:id="_TsBi8KRUEemMKZVsE_d7nA" name="Sol Shaire"/>
+    <players xmi:id="_ocovEKJ7EemFaP2SuqnJFg" idNumber="12323" name="David de Gea" age="25" salary="300000" hisNationality="Spanish " position="Goalkeeper" hisNumberInTheTeam="1" preferFoot="B"/>
+    <players xmi:id="_ocovEaJ7EemFaP2SuqnJFg" idNumber="21342" name="Victor Lindel&#xf6;f" age="22" salary="180000" hisNationality="Croatia " position="Defender" hisNumberInTheTeam="2" preferFoot="L"/>
+  </teams>
+  <teams xmi:id="_X9oiEKRUEemMKZVsE_d7nA" name="Livepool">
+    <coach xmi:id="_TsBi8KRUEemMKZVsE_d7nA" name="Kloppe"/>
+    <players xmi:id="_ln_BsKJxEemFaP2SuqnJFg" idNumber="11111" name="Alison" age="25" salary="220000" hisNationality="Brazil" position="Goalkeeper" hisNumberInTheTeam="1" preferFoot="B"/>
+    <players xmi:id="_xvz1gKJ5EemFaP2SuqnJFg" idNumber="12345" name="Virgil van Dijk" age="28" salary="200000" hisNationality="Croatia" position="Defender" hisNumberInTheTeam="2" preferFoot="R"/>
+  </teams>
+  <teams xmi:id="_XKJ2sKRUEemMKZVsE_d7nA" name="Arsanal">
+    <coach xmi:id="_Zfy4YKRUEemMKZVsE_d7nA" name="Amiry"/>
+    <players xmi:id="_cYUBkKJ7EemFaP2SuqnJFg" idNumber="99292" name="Bernd Leno" age="30" salary="200000" hisNationality="Brazil" position="Goalkeeper" hisNumberInTheTeam="1" preferFoot="R"/>
+    <players xmi:id="_cYUBkaJ7EemFaP2SuqnJFg" idNumber="20000" name="Shkodran Mustafi" age="31" salary="232000" hisNationality="France " position="Defender" hisNumberInTheTeam="2" preferFoot="L"/>
+  </teams>
+  <teams xmi:id="_NX2kQKRWEemMKZVsE_d7nA" name="Chelase">
+    <coach xmi:id="_PWe0IKRWEemMKZVsE_d7nA" name="Lampard"/>
+    <players xmi:id="_bcxmYKJ7EemFaP2SuqnJFg" idNumber="19090" name="Kepa" age="25" salary="240000" hisNationality="Brazil" position="Goalkeeper" hisNumberInTheTeam="1" preferFoot="L"/>
+    <players xmi:id="_bcxmYaJ7EemFaP2SuqnJFg" idNumber="44998" name="Antonio R&#xfc;diger" age="22" salary="430000" hisNationality="England " position="Defender" hisNumberInTheTeam="2" preferFoot="R"/>
+  </teams>
+  <games xmi:id="_zQ-iAKRVEemMKZVsE_d7nA" name="1" idNumber="1" scoreTeam1="2" scoreTeam2="3" refereeReport="Report from referee about the 1 game" journalistReport="Report from journalist about the 1 game" team1="_XKJ2sKRUEemMKZVsE_d7nA" team2="_NX2kQKRWEemMKZVsE_d7nA" leadTheGame="_tc1ZIKRVEemMKZVsE_d7nA" writeReports="_w8rkIKRVEemMKZVsE_d7nA"/>
+  <games xmi:id="_6YuAwKRVEemMKZVsE_d7nA" name="2" idNumber="2" scoreTeam1="2" scoreTeam2="5" refereeReport="Report from referee about the 2 game" journalistReport="Report from journalist about the 2 game" team1="_X9oiEKRUEemMKZVsE_d7nA" team2="_Sy6wsKRUEemMKZVsE_d7nA" leadTheGame="_uzBI8KRVEemMKZVsE_d7nA" writeReports="_yQIJAKRVEemMKZVsE_d7nA"/>
+  <persons xsi:type="league:Referee" xmi:id="_tc1ZIKRVEemMKZVsE_d7nA" idNumber="101010" name="Jalal" hisNationality="" writeReport="Report from referee about the first game"/>
+  <persons xsi:type="league:Referee" xmi:id="_uzBI8KRVEemMKZVsE_d7nA" idNumber="202020" name="Kallel" writeReport="Report from referee about the second  game"/>
+  <persons xsi:type="league:Journalist" xmi:id="_w8rkIKRVEemMKZVsE_d7nA" idNumber="111222" name="Leo" writeReport="Report from journalist about the first game"/>
+  <persons xsi:type="league:Journalist" xmi:id="_yQIJAKRVEemMKZVsE_d7nA" idNumber="111333" name="James" writeReport="Report from journalist about the second  game"/>
+</league:League>

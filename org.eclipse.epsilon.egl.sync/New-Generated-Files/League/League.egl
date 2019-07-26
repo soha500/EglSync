@@ -1,0 +1,231 @@
+
+[% out.setContentType("HTML"); %]
+<html>
+<head>
+	 <title> [%=l.name%] </title>
+	<style>
+		thead {color:black;}
+		tbody {color:black;}
+		tfoot {color:red;}
+		table, th, td {
+    		border: 1px solid black;
+   	 	border-collapse: collapse;
+	}
+	</style>
+</head>
+<body>
+<h1 align="center">[%=l.name%]</h1> 
+	
+	[%for(teamNames in l.teams) { %]
+	<li>
+		<h2> [%=teamNames.name%] </h2>
+	</li>
+	
+	<h3> The current manager for [%=teamNames.name%] team is : [%=teamNames.coach.name%] </h3>
+	
+	<h3> The table below shows all the information about the current players in the [%=teamNames.name%] team : </h3>
+		
+ 		<table class="css-serial" style="width:70%">
+ 			<thead>
+			  <tr>
+			  [*<th align="center">Sr. No</th> *]
+			    <th align="center"> Name </th>
+			    <th align="center"> Position </th>
+			    <th align="center"> Age </th>
+			  </tr>
+			</thead>
+			  	[%for(player in teamNames.players) { %]
+			<tbody>
+ 				<tr>
+ 				[*<td></td> <td align="center"> <td> <ol type="1"> <li> </li></Ol></td> </td> *]
+		    			<td align="center"> [%=player.name%] </td>
+    					<td align="center"> [%=player.position%] </td>
+    					<td align="center"> [%=player.age%] </td>
+  				</tr>
+		  	</tbody>	
+		  		[%}%]
+		  	</table>		
+		[%}%]
+		
+	<h3> Summary of matches of the week 1 </h3>
+ 		<table class="css-serial" style="width:100%">
+ 			<thead>
+			  <tr>
+		    <th align="center"> Games</th>
+		    <th align="center"> Team1 vs Team2 </th>
+		    <th align="center"> Time1 Score</th>
+		    <th align="center"> Time2 Score</th>
+		    <th align="center"> Who Lead The Game </th>
+		    <th align="center"> His Report </th>
+		    <th align="center"> Who Attend The Game </th>
+		    <th align="center"> His Report </th>
+		  </tr>
+		  </thead>
+		  [%for(game in l.games) { %]
+		  <tr>
+		    <td align="center">[%=game.idNumber%]</td>
+		    <td align="center">[%=game.team1.name%] vs [%=game.team2.name%] </td>
+		    <td align="center">[%=game.scoreTeam1%]</td>
+		    <td align="center">[%=game.scoreTeam2%]</td>
+		    <td align="center">[%=game.leadTheGame.name%]</td>
+		    <td align="center">[%=game.refereeReport%] 		  
+ 			<!--
+		    [%=out.startSync("//",  game.id, "refereeReport")%]    
+			handwritten
+		  	[%=out.endSync()%]</td>
+		  	-->
+		  	
+		    <td align="center">[%=game.writeReports.name%]</td>
+		    <td align="center">[%=game.journalistReport%]
+		    <!--
+		    [%=out.startSync("//", game.id , "journalistReport")%] 
+			Add handwritten here
+		    [%=out.endSync()%]</td>
+		    -->
+		    </td>   
+		  </tr>
+		  [%}%]	  
+	</table>	  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[*
+
+[% out.setContentType("HTML"); %]
+<html>
+<head>
+	 <title> [%=l.name%] </title>
+</head>
+<body>
+<h1>[%=l.name%]</h1>
+	<h2> 
+	
+	[%for(teamNames in l.teams) { %]
+	<li>
+		<h2> [%=teamNames.name%] </h2>
+	</li>
+	<h3> The current manager for [%=teamNames.name%] team is : [%=teamNames.coach.name%]</h3>
+	<h3> The current players in [%=teamNames.name%] team are : </h3> 
+ 			<ol>
+ 			[%for(player in teamNames.players) { %]
+ 				<li> [%=player.name%] </li>
+ 			
+ 			[%}%]
+ 		</ol>
+ 		
+	[%}%]
+
+	</h2>
+	<table>
+		  <tr>
+		    <th> Games</th>
+		    <th> ScoreTime1</th>
+		    <th> ScoreTime2</th>
+		  </tr>
+		  [%for(teamNames in l.games) { %]
+		  <tr>
+		    <td>[%=teamNames.idNumber%]</td>
+		  </tr>
+		  	[%}%]
+		  [%for(teamNames in l.games) { %]
+		  <tr>
+		    <td>[%=teamNames.scoreTeam1%]</td>
+		  </tr>
+		  [%}%]
+		  [%for(teamNames in l.games) { %]
+		  <tr>
+		    <td>[%=teamNames.scoreTeam2%]</td>
+		  </tr>
+		  [%}%]
+		  [%=out.startSync("//", "Sultan", " Id ", " property ")%]    
+			 
+     			Add handwritten here
+			
+		  [%=out.endSync()%] 
+	</table>
+<h6>[%=l.persons.name%]</h6>
+</body>
+</html>
+
+*]
+
+[*
+[% out.setContentType("HTML"); %]
+<html>
+<head>
+	 <title> [%=l.name%] </title>
+</head>
+<body>
+<h1>[%=l.name%]</h1>
+	<h2> 
+	[%for(teamNames in l.teams) { %]
+	<li>[%=teamNames.name%]</li>
+	<h3> The manager is : [%=teamNames.manager.name%]</h3>
+	<h3> The players in [%=teamNames.name%] team are : </h3> 
+		[%for(playerNames in l.teams) { %]
+ 			<li>[%=playerNames.players.first.name%] </li>
+ 		[%}%]
+	[%}%]
+
+	</h2>
+<h6>[%=l.persons.name%]</h6>
+</body>
+</html>
+
+public class [%=l.name%]{
+
+
+	[%for (names in l.teams) { %]
+			[%=names.name%]			
+	[%}%]
+	
+	public void update() {
+			[%for (write in l.persons) { %]
+			[%=write.name%]
+			
+			[%=out.startSync('//',"",  write.id, write.name)%]    
+			[%=write.writeReport%]
+			[%=out.endSync()%]
+
+	}
+	[%}%]
+		
+	}
+
+}
+*]

@@ -1,0 +1,8 @@
+rule league2html
+
+	transform l : League{
+	
+	template : "League.egl"
+	
+	target :"gen/" + l.name + '.html'
+}
