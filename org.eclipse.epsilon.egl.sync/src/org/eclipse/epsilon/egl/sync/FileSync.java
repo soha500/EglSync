@@ -61,16 +61,21 @@ public class FileSync {
 
 				String[] idAndAttribute1 = null;
 
-				Pattern p = Pattern.compile("(\\s\\w+.\\s\\w+.)"); // Ok
+				//Pattern p = Pattern.compile("(\\s\\w+.\\s\\w+.)"); // Ok
+				//Pattern p = Pattern.compile("(\\w+.\\w+,\\s+\\w+)"); // Ok
+				Pattern p = Pattern.compile("\\/\\/\\s*sync\\s+(.+\\s*,\\s*\\w+)"); // Ok with sync word
+				//Pattern p = Pattern.compile("\\/\\/\\s*sync\\s+(.+\\s*,\\s*\\w+)\\s+(\\s+\\w+\\s*)\\s+\\/\\/\\s*endSync"); // Ok
 
+
+	
 				Matcher m = p.matcher(line.trim());
 
 				if (m.find())
-					idAndAttribute1 = (String[]) (m.group(0)).split(",");
+					idAndAttribute1 = (String[]) (m.group(1)).split(", ");
 				Synchronization sync = new Synchronization(idAndAttribute1[0].trim(), idAndAttribute1[1].trim());
 
 				try {
-					while (!(line = this.bRead.readLine()).contains("//endsync"))
+					while (!(line = this.bRead.readLine()).contains("//endSync"))
 						sync.addContent(line.trim());
 
 				} catch (IOException e1) {
@@ -83,7 +88,7 @@ public class FileSync {
 				// /*sync with extend 4 groups
 				if (line.contains("extends")) {
 
-					Pattern p = Pattern.compile("\\s(.+\\s*,\\s*\\w+)\\s*\\*\\/\\s(\\w+)\\s*\\/\\*\\s*endsync\\s*\\*\\/\\s+\\w+\\s+\\/\\*\\s*sync\\s+(.+\\s*,\\s*\\w+)\\s*\\*\\/\\s*(\\w+)\\s*\\/\\*\\s*endSync\\s*\\*\\/"); // One group without sync and endsync
+					Pattern p = Pattern.compile("\\s(.+\\s*,\\s*\\w+)\\s*\\*\\/\\s(\\w+)\\s*\\/\\*\\s*endSync\\s*\\*\\/\\s+\\w+\\s+\\/\\*\\s*sync\\s+(.+\\s*,\\s*\\w+)\\s*\\*\\/\\s*(\\w+)\\s*\\/\\*\\s*endSync\\s*\\*\\/"); // One group without sync and endsync
 
 					Matcher m = p.matcher(line.trim());
 
@@ -112,8 +117,10 @@ public class FileSync {
 				}
 				// /*sync without extend 3 groups
 				else {
+					// old and work
+					final String regex = "\\/\\*\\s*sync\\s+(.+)\\s*,\\s*(\\w+)\\s*\\*\\/\\s*(\\w+)\\s*\\/\\*\\s*endSync\\s*\\*\\/";
 
-					final String regex = "\\/\\*\\s*sync\\s+(.+)\\s*,\\s*(\\w+)\\s*\\*\\/\\s*(\\w+)\\s*\\/\\*\\s*endsync\\s*\\*\\/";
+					//final String regex = "\\s+(.+\\s*),(\\s*\\w+)\\s*\\*\\/\\s*(\\w+)\\s*\\/\\*\\s*endSync\\s*\\*\\/";
 
 					final Pattern pattern = Pattern.compile(regex);
 					final Matcher matcher = pattern.matcher(line);
@@ -123,7 +130,8 @@ public class FileSync {
 						String id = matcher.group(1).trim();
 						String attribute = matcher.group(2).trim();
 						String content = matcher.group(3).trim();
-
+						
+	
 						Synchronization sync = new Synchronization(id, attribute, content);
 
 						allTheSyncRegionsInTheFile.add(sync);
