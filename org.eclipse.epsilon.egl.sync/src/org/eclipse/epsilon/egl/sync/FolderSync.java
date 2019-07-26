@@ -82,15 +82,7 @@ public class FolderSync {
 		checkSyncs(model, allTheSyncsRegionOfTheFolder);
 
 	}
-	/*
-	 * //				Pattern p = Pattern.compile("(\\s+\\w+,\\s+\\w+)");  //Worked..
-////			Pattern p = Pattern.compile("\\/\\*\\s*sync\\s+(.+)\\s*,\\s*(\\w+)\\s*\\*\\/\\s*(\\w+)\\s*\\/\\*\\s*endSync\\s*\\*\\/"); // The whole line with sync and endsync 
-////			Pattern p = Pattern.compile("\\s+(.+)\\s*,\\s*(\\w+)\\s*\\*\\/\\s*(\\w+)\\s*\\/\\*\\s*endSync\\s*\\*\\/");  //three groups
-//				Pattern p = Pattern.compile("\\/\\*sync\\s+(.+\\s*,\\s*\\w+)\\s*\\*\\/\\s*(\\w+)\\s*\\/\\*\\s*endSync\\s*\\*\\/"); // Two groups
-////			Pattern p = Pattern.compile("\\/\\*\\s*sync\\s+(.+\\w+\\s*\\*\\/\\s*\\w+)\\s*\\/\\*\\s*endSync\\s*\\*\\/");  //One group with sync and endsync
-////			Pattern p = Pattern.compile("\\s+(.+\\w+\\s*\\*\\/\\s*\\w+)\\s*");  //One group without sync and endsync
-// 
-	 */
+
 
 	public void getSynchronization(String folder, IModel model) {
 
@@ -106,7 +98,7 @@ public class FolderSync {
 
 		updateTheModel(model, allTheSyncRegionsInTheFolder);
 	}
-
+	
 public void checkSyncs(IModel model, List<Synchronization> allTheSyncsRegionOfTheFolder) {
 
 		// create a data structure

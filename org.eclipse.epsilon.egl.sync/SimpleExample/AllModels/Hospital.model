@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ASCII"?>
+<hospital:Hospital xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:hospital="hospital" xsi:schemaLocation="hospital Hospital.ecore" xmi:id="_cWgDgJYhEem2tcDP747eqQ" name="newYork" city="York">
+  <departments xmi:id="_eBNR0JYhEem2tcDP747eqQ" name="Dental" numberOfBeds="10"/>
+  <Doctors xmi:id="_vUA50KkOEemfUbaDCQBa4w" name="Adam" gender="77" age="23" writeReport="Dr David Rosser, of University Hospitals Birmingham, said pension tax changes mean consultants fear extra earnings will trigger large bills."/>
+  <Doctors xmi:id="_o4Gi4JYhEem2tcDP747eqQ" name="Mark" gender="77" age="30" specialism="Dentist " writeReport="One senior doctor covered shifts, which would otherwise have gone unstaffed, for free to avoid a huge tax bill."/>
+  <patients xmi:id="_MAfFUKkPEemfUbaDCQBa4w" name="Edward " gender="77" age="32" healthState="Bad" theatre="true"/>
+  <patients xmi:id="_ONrVoKkPEemfUbaDCQBa4w" name="Oscar" gender="77" age="12" healthState="Good"/>
+  <patients xmi:id="_NGC_MKkPEemfUbaDCQBa4w" name="Henry" gender="77" age="56" healthState="Good"/>
+  <patients xmi:id="_Ll-3MJYiEem2tcDP747eqQ" name="Willam" gender="77" age="20" healthState="Good"/>
+</hospital:Hospital>

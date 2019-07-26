@@ -1,20 +1,20 @@
 
-/*sync _kcT6gDUdEemrVIiex_kxBw, name*/ WindowMain /*endsync*/ extends /*sync _kcT6gDUdEemrVIiex_kxBw, name*/ WindowExtends /*endsync*/{
 
-/*sync _kcT6gDUdEemrVIiex_kxBw, name*/ newName /*endsync*/{
 
+/*sync _kcT6gDUdEemrVIiex_kxBw, name*/ WindowMain /*endSync*/{
+
+
+//sync _l5GBkDUdEemrVIiex_kxBw, action 
+       
+b
+
+//endSync
 
 //sync _l5GBkDUdEemrVIiex_kxBw, action 
        
 x
 
-//endsync
-
-//sync _l5GBkDUdEemrVIiex_kxBw, action 
-       
-a
-
-//endsync
+//endSync
 
 
 			
@@ -23,13 +23,13 @@ a
        
 z
 
-//endsync
+//endSync
 
 //sync _C9NRADUeEemrVIiex_kxBw, action 
        
-c
+d
 
-//endsync
+//endSync
 
 
 

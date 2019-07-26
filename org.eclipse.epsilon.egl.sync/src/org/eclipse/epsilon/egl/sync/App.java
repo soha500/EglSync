@@ -22,6 +22,15 @@ public class App {
 		model.setName("M");
 		model.setMetamodelFile(new File("/Users/sultanalmutairi/Projects/runtime-New_configuration(1)/StateMachineProject/Statemachine.ecore").getAbsolutePath());
 		model.setModelFile(new File("/Users/sultanalmutairi/Projects/runtime-New_configuration(1)/StateMachineProject/Statemachine.model").getAbsolutePath());
+//		model.setModelFile(new File("/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/Statemachine.model").getAbsolutePath());
+		
+		//League Model
+//		model.setMetamodelFile(new File("/Users/sultanalmutairi/Documents/Workspaces/runtime-New_configuration/League/League.ecore").getAbsolutePath());
+//		model.setModelFile(new File("/Users/sultanalmutairi/Documents/Workspaces/runtime-New_configuration/League/League.model").getAbsolutePath());
+
+		
+		
+		
 		model.setReadOnLoad(true);
 		model.setStoredOnDisposal(false);
 		model.load();
