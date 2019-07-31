@@ -16,33 +16,18 @@ import org.eclipse.epsilon.eol.execute.introspection.IPropertySetter;
 import org.eclipse.epsilon.eol.models.IModel;
 
 public class SyncAppFromModel {
-	//old one 
-//	private static final String FOLDER_PATH ="/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/SimpleExample/All-Generated-Files";
 
 	//League
-	private static final String FOLDER_PATH ="/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/SimpleExample/GeneratedFileFromLeague";
-
-	//hospital
-//	private static final String FOLDER_PATH ="/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync";
-
+	//private static final String FOLDER_PATH ="/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/SimpleExample/GeneratedFileFromLeague";
+	private static final String FOLDER_PATH ="./SimpleExample/GeneratedFileFromLeague";
 
 	public static void main(String[] args) throws EolModelLoadingException, IOException {
-		//List<Synchronization> listObjects = new ArrayList<Synchronization>();
-		
+
+		// League ecore and model
 		EmfModel model = new EmfModel();
 		model.setName("M");
-		
-//		model.setMetamodelFile(new File("Statemachine.ecore").getAbsolutePath());
-//		model.setModelFile(new File("SimpleExample/models/Statemachine.model").getAbsolutePath());
-	
-		// League ecore  and model
-		model.setMetamodelFile(new File("/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/SimpleExample/ModelLeague/League.ecore").getAbsolutePath());
-		model.setModelFile(new File("/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/SimpleExample/ModelLeague/League.model").getAbsolutePath());		
-	
-		// hospital
-//		model.setMetamodelFile(new File("/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/Hospital.ecore").getAbsolutePath());
-//		model.setModelFile(new File("/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/Hospital.model").getAbsolutePath());		
-			
+		model.setMetamodelFile(new File("SimpleExample/ModelLeague/League.ecore").getAbsolutePath());
+		model.setModelFile(new File("SimpleExample/ModelLeague/League.model").getAbsolutePath());
 		model.setReadOnLoad(true);
 		model.setStoredOnDisposal(true);
 
@@ -51,14 +36,57 @@ public class SyncAppFromModel {
 		} catch (EolModelLoadingException e2) {
 			e2.printStackTrace();
 		}
-		
+
 		FolderSync syncReader = new FolderSync();
 		syncReader.getSynchronization(FOLDER_PATH, model);
-
 
 	}
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//old one 
+//private static final String FOLDER_PATH ="/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/SimpleExample/All-Generated-Files";
+
+
+//hospital
+//private static final String FOLDER_PATH ="/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync";
+
+
+
+//model.setMetamodelFile(new File("Statemachine.ecore").getAbsolutePath());
+//model.setModelFile(new File("SimpleExample/models/Statemachine.model").getAbsolutePath());
+
+// hospital
+//model.setMetamodelFile(new File("Hospital.ecore").getAbsolutePath());
+//model.setModelFile(new File("Hospital.model").getAbsolutePath());		
 
 
 //public void checkSyncs(IModel model, List<Synchronization> allTheSyncsRegionOfTheFolder) {

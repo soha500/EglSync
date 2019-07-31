@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.eclipse.epsilon.emc.emf.EmfModel;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eol.execute.introspection.IPropertyGetter;
 import org.eclipse.epsilon.eol.execute.introspection.IPropertySetter;
@@ -45,8 +46,9 @@ public class FolderSync {
 		for (String file : fileNames) {
 
 			try {
+				System.out.println("File: " + file);
 				// put the generated file's name and its content into the data structure
-				List<String> content = Files.readAllLines(folderPath.resolve(file));
+				List<String> content = Files.readAllLines(Paths.get(file));
 				namesAndContents.put(file, content);
 
 				FileSync fileSync = new FileSync(file);
@@ -65,24 +67,9 @@ public class FolderSync {
 
 	public void updateTheModel(IModel model, List<Synchronization> allTheSyncsRegionOfTheFolder) {
 
-		//		for (Synchronization sync : allTheSyncsRegionOfTheFolder) {
-		//			
-		//			IPropertyGetter propertyGetter = model.getPropertyGetter();
-		//			Object modelElement = model.getElementById(sync.getId());
-		//			try {
-		//				System.out.println(propertyGetter.invoke(modelElement, sync.getAttribute()));
-		//				//System.out.println();
-		//
-		//			} catch (EolRuntimeException e) {
-		//				// TODO Auto-generated catch block
-		//				e.printStackTrace();
-		//			}
-		//		}
-
 		checkSyncs(model, allTheSyncsRegionOfTheFolder);
 
 	}
-
 
 	public void getSynchronization(String folder, IModel model) {
 
@@ -91,15 +78,13 @@ public class FolderSync {
 		allTheSyncRegionsInTheFolder = getAllTheSyncsRegionsOfTheFolder(folder);
 
 		for (Synchronization sync : allTheSyncRegionsInTheFolder) {
-			//			System.out.println(sync.getId());
-			//			System.out.println(sync.getAttribute());
-			//			System.out.println(sync.getContent());
+
 		}
 
 		updateTheModel(model, allTheSyncRegionsInTheFolder);
 	}
-	
-public void checkSyncs(IModel model, List<Synchronization> allTheSyncsRegionOfTheFolder) {
+
+	public void checkSyncs(IModel model, List<Synchronization> allTheSyncsRegionOfTheFolder) {
 
 		// create a data structure
 		Map<String, Set<String>> map = new HashMap<String, Set<String>>();
@@ -213,3 +198,29 @@ public void checkSyncs(IModel model, List<Synchronization> allTheSyncsRegionOfTh
 	}
 
 }
+
+//		for (Synchronization sync : allTheSyncsRegionOfTheFolder) {
+//			
+//			IPropertyGetter propertyGetter = model.getPropertyGetter();
+//			Object modelElement = model.getElementById(sync.getId());
+//			try {
+//				System.out.println(propertyGetter.invoke(modelElement, sync.getAttribute()));
+//				//System.out.println();
+//
+//			} catch (EolRuntimeException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+
+//File path= new File("SimpleExample/GeneratedFileFromLeague/Premier_League.html");
+//
+//
+//DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+//DocumentBuilder dbBuilder = dbFactory.newDocumentBuilder();
+//Document doc = dbBuilder.parse(path);
+//doc.getDocumentElement().normalize();
+//
+//NodeList nList = doc.getElementsByTagName("coach");
+//
+//return  nList.getLength();
