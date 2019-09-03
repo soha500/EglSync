@@ -1,3 +1,4 @@
+package org.eclipse.epsilon.egl.sync;
 //package org.eclipse.epsilon.egl.sync;
 //package org.eclipse.epsilon.egl.sync;
 //

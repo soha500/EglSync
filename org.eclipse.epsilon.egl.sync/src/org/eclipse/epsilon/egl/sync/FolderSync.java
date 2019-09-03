@@ -21,6 +21,7 @@ import org.eclipse.epsilon.eol.execute.introspection.IPropertySetter;
 import org.eclipse.epsilon.eol.models.IModel;
 
 public class FolderSync {
+	
 
 	public List<Synchronization> getAllTheSyncsRegionsOfTheFolder(String folder) {
 
@@ -65,7 +66,7 @@ public class FolderSync {
 
 	}
 
-	public void updateTheModel(IModel model, List<Synchronization> allTheSyncsRegionOfTheFolder) {
+	public void updateTheModel(IModel model, List<Synchronization> allTheSyncsRegionOfTheFolder) { // change to boolean?
 
 		checkSyncs(model, allTheSyncsRegionOfTheFolder);
 
@@ -193,8 +194,10 @@ public class FolderSync {
 			} catch (EolRuntimeException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
+				//return false;
 			}
 		}
+		// return true;
 	}
 
 }

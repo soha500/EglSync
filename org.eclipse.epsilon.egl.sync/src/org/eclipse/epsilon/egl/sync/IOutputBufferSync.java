@@ -1,6 +1,7 @@
 //package org.eclipse.epsilon.egl.sync;
-//package org.eclipse.epsilon.egl.sync;
-//
+////package org.eclipse.epsilon.egl.sync;
+////package org.eclipse.epsilon.egl.sync;
+////
 //import org.eclipse.epsilon.egl.exceptions.EglRuntimeException;
 //import org.eclipse.epsilon.egl.output.IOutputBuffer;
 //

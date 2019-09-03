@@ -16,12 +16,14 @@ import org.eclipse.epsilon.egl.EglFileGeneratingTemplateFactory;
 import org.eclipse.epsilon.egl.EgxModule;
 import org.eclipse.epsilon.emc.emf.EmfModel;
 import org.eclipse.epsilon.eol.IEolModule;
+import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eol.exceptions.models.EolModelLoadingException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.xml.sax.SAXException;
+
 
 public class SyncTest {
 	private static final String FOLDER_PATH = "./SimpleExample/GeneratedFileFromLeague";
@@ -44,11 +46,23 @@ public class SyncTest {
 		}
 		syncReader = new FolderSync();
 	}
-
-	// Here want to create temporary folder in order to put all the contents of files in it and read it to test 
-	@Rule
-	public TemporaryFolder tempFolder = new TemporaryFolder();
 	
+	// createModule()
+	public IEolModule createModule() {
+	try {
+				EglFileGeneratingTemplateFactory templateFactory = new EglFileGeneratingTemplateFactory();
+				//templateFactory.setOutputRoot(new File("/SimpleExample/GeneratedFileFromLeague"));
+				templateFactory.setOutputRoot("/SimpleExample/GeneratedFileFromLeague");
+				return new EgxModule(templateFactory);
+			} catch (Exception ex) {
+				throw new RuntimeException(ex);
+			}
+		}
+	
+	// Here want to create temporary folder in order to put all the contents of files in it and read it to test 
+	 @Rule
+	   public TemporaryFolder tempFolder = new TemporaryFolder();
+	   
 
 
 	@Test
@@ -57,9 +71,18 @@ public class SyncTest {
 		
 		IEolModule module = createModule(); // The createModule() method follows
 		module.getContext().getModelRepository().addModel(model); // The model parameter is the EmfModel you already create so you need to include that code as well.
-		module.parse(getFileURI("/League/League.egx"));
-		// module.parse("...");
-		module.execute();
+		//module.parse(getFileURI("/League/League.egx"));
+		try {
+			module.parse("/League/League.egx");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			module.execute();
+		} catch (EolRuntimeException e) {
+			e.printStackTrace();
+		}
+		
 		/*
 		public IEolModule createModule() {
 		try {
@@ -72,16 +95,22 @@ public class SyncTest {
 			} */
 		
 	}
-	@Test
-	public void executeStep2() {
-	// i should write what i want to add to sync region ( an automated manually)
-		FolderSync folderSync = new FolderSync(); 
-		//folderSync.updateTheModel(model, allTheSyncsRegionOfTheFolder);
-		
-		
 
+	@Test
+	public void executeStep2() throws IOException{
+	// i should write what i want to add to sync region ( an automated manually)
+		FolderSync folderSync = new FolderSync();
+		File file = tempFolder.newFolder("testfolder");
+   
+       // Verify the content
+//	    assertEquals();
+        
+		assertTrue(file.exists());
 		
+		//folderSync.updateTheModel(model, allTheSyncsRegionOfTheFolder);
+	
 	}
+	
 	@Test
 	public void executeStep3() {
 	// here i should pass the folderSync in order to update the model
@@ -139,8 +168,35 @@ public class SyncTest {
 	
 	
 	
-	
-	
+//	   @Test
+//	   public void testWrite() throws IOException {
+//	     // Create a temporary file.
+//	     final File tempFile = tempFolder.newFile("tempFile.txt");
+//	   
+//	     // Write something to it.
+//	     FileUtils.writeStringToFile(tempFile, "hello world");
+//	   
+//	     // Read it from temp file
+//	     final String s = FileUtils.readFileToString(tempFile);
+//	   
+//	     // Verify the content
+//	     Assert.assertEquals("hello world", s);
+//	      
+//	     //Note: File is guaranteed to be deleted after the test finishes.
+//	   }
+	   
+//    @Test
+//    public void testCreateFolder() throws IOException{
+//        File file = tempFolder.newFolder("testfolder");
+//        assertTrue(file.exists());
+//    }
+//     
+//    @Test
+//    public void testDeleteFolder() throws IOException{
+//        File file = tempFolder.newFile("testfolder");
+//        file.delete();
+//        assertFalse(file.exists());
+//    }	
 //	@Test
 //	// Here I expect to have 4 regions as i have in the html file/ it works as
 //	public void getNumberOfSyncRegions() {
