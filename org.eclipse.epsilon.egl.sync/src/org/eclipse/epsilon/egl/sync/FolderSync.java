@@ -39,7 +39,7 @@ public class FolderSync {
 			System.err.println("Error reading files");
 		}
 
-		// create data structure for all files's names and contents in the folder
+		// Create data structure for all files's names and contents in the folder
 		Map<String, List<String>> namesAndContents = new TreeMap<String, List<String>>();
 
 		List<Synchronization> allTheSyncRegionsInTheFolder = new ArrayList<Synchronization>();

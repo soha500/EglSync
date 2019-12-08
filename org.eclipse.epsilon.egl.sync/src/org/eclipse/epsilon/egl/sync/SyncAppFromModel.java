@@ -20,9 +20,6 @@ import org.junit.Test;
 
 public class SyncAppFromModel {
 
-	//League
-	//private static final String FOLDER_PATH ="/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/SimpleExample/GeneratedFileFromLeague";
-	//private static final String FOLDER_PATH ="./SimpleExample/GeneratedFileFromLeague";
 	// this works with updating 
 	private static final String FOLDER_PATH ="/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/SimpleExample/GeneratedFilesFromUniversity/Test1";
 	

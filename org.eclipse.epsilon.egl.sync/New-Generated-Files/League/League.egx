@@ -4,5 +4,5 @@ rule league2html
 	
 	template : "League.egl"
 	
-	target :"gen/" + l.name + '.html'
+	target :   l.name + '.html'
 }

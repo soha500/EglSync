@@ -17,10 +17,6 @@ public class SyncApp {
 		EmfModel model = new EmfModel();
 		model.setName("M");
 
-		//League Model
-//		model.setMetamodelFile(new File("/Users/sultanalmutairi/Documents/Workspaces/runtime-New_configuration/League/League.ecore").getAbsolutePath());
-//		model.setModelFile(new File("/Users/sultanalmutairi/Documents/Workspaces/runtime-New_configuration/League/League.model").getAbsolutePath());
-
 		//University Model
 //		model.setMetamodelFile(new File("/Users/sultanalmutairi/Documents/Workspaces/runtime-New_configuration/University-Project/University.ecore").getAbsolutePath());
 //		model.setModelFile(new File("/Users/sultanalmutairi/Documents/Workspaces/runtime-New_configuration/University-Project/University.model").getAbsolutePath());

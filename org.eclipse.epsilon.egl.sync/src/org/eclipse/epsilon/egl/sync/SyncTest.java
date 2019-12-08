@@ -53,7 +53,7 @@ public class SyncTest {
 	FolderSync syncReader;
 	EmfModel tempModel;
 	static List<String> orginalNewLines;
-
+//
 	@BeforeClass
 	public static void setup() {
 //		 String pathString = FOLDER_PATH + "/MDE101.html" ;

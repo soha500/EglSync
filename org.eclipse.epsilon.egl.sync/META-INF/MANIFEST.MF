@@ -9,4 +9,5 @@ Require-Bundle: org.eclipse.epsilon.egl.engine,
  org.eclipse.epsilon.emc.emf,
  org.junit
 Import-Package: junit.framework,
+ org.h2.util,
  org.junit;version="4.12.0"
