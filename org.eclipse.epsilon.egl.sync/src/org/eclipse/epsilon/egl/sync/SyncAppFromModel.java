@@ -19,7 +19,7 @@ import org.eclipse.epsilon.eol.models.IModel;
 import org.junit.Test;
 
 public class SyncAppFromModel {
-
+//
 	// this works with updating 
 	private static final String FOLDER_PATH ="/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/SimpleExample/GeneratedFilesFromUniversity/Test1";
 	

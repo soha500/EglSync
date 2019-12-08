@@ -1,0 +1,21 @@
+rule league2html
+
+	transform l : League{
+	
+	template : "League.egl"
+	
+	target : "gen/" + l.name + '.html'
+	 		
+
+}
+
+//rule league2htmlTest1
+
+//	transform l : League{
+	
+//	template : "League.egl"
+	
+//	target : "test1/" + l.name + '.html'
+	 		
+
+//}

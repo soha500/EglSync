@@ -48,7 +48,7 @@ public class SyncTest {
 	//private static final String FOLDER_PATH = "./SimpleExample/GeneratedFilesFromUniversity/";
 	// Here I added the . to see if it works or not
 	// private static final String FOLDER_PATH ="./GeneratedFilesFromUniversity/";
-
+//
 	EmfModel model;
 	FolderSync syncReader;
 	EmfModel tempModel;

@@ -13,7 +13,7 @@ import org.eclipse.epsilon.eol.models.IModel;
 
 public class FileSync {
 
-	// All fields
+	// all fields
 	FileInputStream fIn;
 	public BufferedReader bRead;
 	public IModel model;

@@ -17,7 +17,7 @@ public class SyncApp {
 		EmfModel model = new EmfModel();
 		model.setName("M");
 
-		//University Model
+		//University Models
 //		model.setMetamodelFile(new File("/Users/sultanalmutairi/Documents/Workspaces/runtime-New_configuration/University-Project/University.ecore").getAbsolutePath());
 //		model.setModelFile(new File("/Users/sultanalmutairi/Documents/Workspaces/runtime-New_configuration/University-Project/University.model").getAbsolutePath());
 
