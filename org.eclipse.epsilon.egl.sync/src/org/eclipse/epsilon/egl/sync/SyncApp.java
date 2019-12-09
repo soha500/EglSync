@@ -17,16 +17,14 @@ public class SyncApp {
 		EmfModel model = new EmfModel();
 		model.setName("M");
 
-		//University Models
+		//University Model
 //		model.setMetamodelFile(new File("/Users/sultanalmutairi/Documents/Workspaces/runtime-New_configuration/University-Project/University.ecore").getAbsolutePath());
 //		model.setModelFile(new File("/Users/sultanalmutairi/Documents/Workspaces/runtime-New_configuration/University-Project/University.model").getAbsolutePath());
 
 
-		//University-Last-Project    //this works and automatically generates the files without need to all url 
-		// and with updating
+		//University-Last-Project    //this works and automatically generates the files without need to all url and with updating
 		model.setMetamodelFile(new File("SimpleExample/Model-University/University.ecore").getAbsolutePath());
-		model.setModelFile(new File("SimpleExample/Model-University/University.model").getAbsolutePath());
-		
+		model.setModelFile(new File("SimpleExample/Model-University/University.model").getAbsolutePath());	
 		model.setReadOnLoad(true);
 		model.setStoredOnDisposal(true);
 		model.load();
@@ -43,10 +41,8 @@ public class SyncApp {
 		propertySetter.invoke("Hello from Java");
 		
 		model.dispose();
-		
-		
-	}
-	
+			
+	}	
 }
 
 

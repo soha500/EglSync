@@ -81,7 +81,6 @@ public class FolderSync {
 
 		for (Synchronization sync : allTheSyncsRegionOfTheFolder) {
 
-			//try {
 				if (model.getElementById(sync.getId()) == null) {
 					System.err.println("Sorry! There's no respictive id in the model: " + sync.getId());
 					System.exit(0);
@@ -91,14 +90,6 @@ public class FolderSync {
 				Object modelElement = model.getElementById(sync.getId());
 
 				String valueOfAttributeInTheModel;
-//
-//				if (propertyGetter.invoke(modelElement, sync.getAttribute()) instanceof String) {
-//					valueOfAttributeInTheModel = propertyGetter.invoke(modelElement, sync.getAttribute()).toString();
-//				} else if (propertyGetter.invoke(modelElement, sync.getAttribute()) instanceof Integer) {
-//					valueOfAttributeInTheModel = propertyGetter.invoke(modelElement, sync.getAttribute()).toString();
-//				} else {
-//					System.err.println("Other wrong type");
-//				}
 
 				String valueOfAttributeInSyncRegion = (String) sync.getContent();
 				// new array without duplicated values
@@ -113,14 +104,7 @@ public class FolderSync {
 					map.get(key).add(valueOfAttributeInSyncRegion);
 				else
 					map.put(key, valuesInSyncRegionWithoutDuplactie);
-//
-//			} catch (EolRuntimeException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-//			catch (NullPointerException e1) {
-//				System.err.println("Sorry, such model doesn't exist");
-//			}
+
 
 		}
 
@@ -130,13 +114,14 @@ public class FolderSync {
 			String id = id_attr[0];
 			String attribute = id_attr[1];
 			
+			
 			ArrayList<String> values = new ArrayList(entry.getValue());
 			
 			int type = 0;
 			
 			Object modelElement = model.getElementById(id);
 
-			Object valueOfAttributeInTheModel = " ";
+			Object valueOfAttributeInTheModel = null;
 			try {
 
 				if (propertyGetter.invoke(modelElement, attribute) instanceof String) {
@@ -181,7 +166,7 @@ public class FolderSync {
 				}
 
 				if (values.size() == 1) {
-					if (valueOfAttributeInTheModel.equals(values.get(0))) {
+					if ((valueOfAttributeInTheModel.toString()).equals(values.get(0))) {
 
 						System.out.println("size 1, same value in the model: " + valueOfAttributeInTheModel);
 
@@ -196,26 +181,26 @@ public class FolderSync {
 							// Integer.parseInt
 							if (type == 0) {
 								propertySetter.invoke(values.get(0));		
-							}
+							} else
 							if (type == 1) {
 								propertySetter.invoke(Integer.parseInt(values.get(0)));	
-							}
+							} else
 							if (type == 2) {
 								propertySetter.invoke(Double.parseDouble(values.get(0)));
 								
-							}
+							} else
 							if (type == 3) {
 								propertySetter.invoke(Float.parseFloat(values.get(0)));
-							}
+							} else
 							if (type == 4) {
 								propertySetter.invoke(Boolean.parseBoolean(values.get(0)));
-							}
+							} else
 							if (type == 5) {
 								propertySetter.invoke(Long.parseLong(values.get(0)));
-							}
+							} else
 							if (type == 6) {
 								propertySetter.invoke(Short.parseShort(values.get(0)));
-							}
+							} else
 							if (type == 7) {
 								propertySetter.invoke(Byte.parseByte(values.get(0)));
 							}
@@ -358,18 +343,15 @@ public class FolderSync {
 					return "The respective attribute is not found";
 				}
 /////----------------------------------------------------- for all types
-
 				if (dt.isCompatibale(sync.content, valueOfAttributeInTheModel)){
-					
-					System.out.println("type is compatible");
-						
+					System.out.println("type is compatible");		
 				}
 				else {
 					System.err.println(" Sorry! The value's types are not compatible ");
 					//System.exit(0);
 					return "Incompatible type";
 				}
-				
+//				
 			} else {
 				System.err.println("The respective element not found");
 				//System.exit(0);
@@ -383,7 +365,9 @@ public class FolderSync {
 
 		String stepCheck = "finish";
 		stepCheck = checkModelAgainstEachSyncRegion(model, allTheSyncsRegionOfTheFolder);
-		if(!stepCheck.equals("finish")) return stepCheck;
+		if(!stepCheck.equals("finish")) 
+			return stepCheck;
+		
 		checkSyncs(model, allTheSyncsRegionOfTheFolder);
 		System.out.println("All sync regions are without conflicts or errors. Thus, model has been updated.");
 		return stepCheck;
@@ -395,7 +379,8 @@ public class FolderSync {
 
 		allTheSyncRegionsInTheFolder = getAllTheSyncsRegionsOfTheFolder(folder);
 		
-		if(allTheSyncRegionsInTheFolder == null) return "Misformated or incompleted";
+		if(allTheSyncRegionsInTheFolder == null) 
+			return "Misformated or incompleted";
 		String result = updateTheModel(model, allTheSyncRegionsInTheFolder);
 	
 		return result;
@@ -750,315 +735,4 @@ public class FolderSync {
 //if ((isValueInModelFloat && isValueInSyncFloat) || (!isValueInModelFloat && !isValueInSyncFloat)) {
 //	System.out.println("type is compatible");
 //}
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//String valueOfAttributeInTheModel;
-//if (propertyGetter.invoke(modelElement, sync.getAttribute()) instanceof String) {
-//	valueOfAttributeInTheModel = propertyGetter.invoke(modelElement, sync.getAttribute()).toString();
-//} else if (propertyGetter.invoke(modelElement, sync.getAttribute()) instanceof Integer) {
-//	valueOfAttributeInTheModel = propertyGetter.invoke(modelElement, sync.getAttribute()).toString();
-//} else {
-//	System.err.println("Other wrong type");
-//}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//		for (Synchronization sync : allTheSyncsRegionOfTheFolder) {
-//			
-//			IPropertyGetter propertyGetter = model.getPropertyGetter();
-//			Object modelElement = model.getElementById(sync.getId());
-//			try {
-//				System.out.println(propertyGetter.invoke(modelElement, sync.getAttribute()));
-//				//System.out.println();
-//
-//			} catch (EolRuntimeException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-
-//File path= new File("SimpleExample/GeneratedFileFromLeague/Premier_League.html");
-//
-//
-//DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-//DocumentBuilder dbBuilder = dbFactory.newDocumentBuilder();
-//Document doc = dbBuilder.parse(path);
-//doc.getDocumentElement().normalize();
-//
-//NodeList nList = doc.getElementsByTagName("coach");
-//
-//return  nList.getLength();
-
-// works fine 13/11
-//package org.eclipse.epsilon.egl.sync;
-//
-//import java.io.IOException;
-//import java.nio.file.DirectoryStream;
-//import java.nio.file.Files;
-//import java.nio.file.Path;
-//import java.nio.file.Paths;
-//import java.util.ArrayList;
-//import java.util.HashMap;
-//import java.util.HashSet;
-//import java.util.Iterator;
-//import java.util.List;
-//import java.util.Map;
-//import java.util.Set;
-//import java.util.TreeMap;
-//
-//import org.eclipse.epsilon.emc.emf.EmfModel;
-//import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
-//import org.eclipse.epsilon.eol.execute.introspection.IPropertyGetter;
-//import org.eclipse.epsilon.eol.execute.introspection.IPropertySetter;
-//import org.eclipse.epsilon.eol.models.IModel;
-//
-//public class FolderSync {
-//	
-//
-//	public List<Synchronization> getAllTheSyncsRegionsOfTheFolder(String folder) {
-//
-//		Path folderPath = Paths.get(folder);
-//		//System.out.println("Path: " + folderPath);
-//		// call all list of the files in the folder
-//		List<String> fileNames = new ArrayList<>();
-//
-//		try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(folderPath)) {
-//			for (Path path : directoryStream) {
-//				fileNames.add(path.toString());
-//			}
-//		} catch (IOException ex) {
-//			System.err.println("Error reading files");
-//			ex.printStackTrace();
-//		}
-//
-//		// create data structure for all files's names and contents in the folder
-//		Map<String, List<String>> namesAndContents = new TreeMap<String, List<String>>();
-//
-//		List<Synchronization> allTheSyncRegionsInTheFolder = new ArrayList<Synchronization>();
-//
-//		for (String file : fileNames) {
-//
-//			try {
-//				// System.out.println("File: " + file);
-//				// put the generated file's name and its content into the data structure
-//				List<String> content = Files.readAllLines(Paths.get(file));
-//				namesAndContents.put(file, content);
-//
-//				FileSync fileSync = new FileSync(file);
-//				List<Synchronization> syncRegionsOfThisFile = fileSync.getAllTheSyncRegionsOfTheFile();
-//				allTheSyncRegionsInTheFolder.addAll(syncRegionsOfThisFile);
-//
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//
-//		}
-//		return allTheSyncRegionsInTheFolder;
-//
-//	}
-//
-//	public void updateTheModel(IModel model, List<Synchronization> allTheSyncsRegionOfTheFolder) {
-//
-//		checkSyncs(model, allTheSyncsRegionOfTheFolder);
-//		//return checkSyncs(model, allTheSyncsRegionOfTheFolder);
-//
-//		
-//	}
-//	/*
-//	 * Check for all sync format,  Collect all them
-//	 * 
-//	 * When sync block missing something, you need to defined some validated rules that says I will process a file only:
-//	 * 
-//	 * 1- If all start //sync finish with //endsync
-//	 * 2- If there are no kind of nested //sync 
-//	 * 3- If //sync is followed by Id',' and attribute name
-//	 * 
-//	 * If file does not follow these rules just return error message  
-//	 */
-//
-////	/*
-////	 * - Make sure all files are well defined 
-////	 * - Make sure no conflux between each sync block 
-////	 * - Make sure no type inconsistent between the value in files and model 
-////	 * - make sure not missing model Ids 
-////	 */
-////	
-////	// Check the type for the sync regions equal the type in the model 
-////	// EX, String in the model the type must be String in the region that wants to update this attribute. 
-//
-//
-//
-//	public void getSynchronization(String folder, IModel model) {
-//
-//		List<Synchronization> allTheSyncRegionsInTheFolder = new ArrayList<Synchronization>();
-//
-//		allTheSyncRegionsInTheFolder = getAllTheSyncsRegionsOfTheFolder(folder);
-//
-//		for (Synchronization sync : allTheSyncRegionsInTheFolder) {
-//
-//		}
-//
-//		updateTheModel(model, allTheSyncRegionsInTheFolder);
-//		//return updateTheModel(model, allTheSyncRegionsInTheFolder);
-//		//return true;
-//	}
-//	public void checkSyncs(IModel model, List<Synchronization> allTheSyncsRegionOfTheFolder) {
-//
-//		// create a data structure
-//		Map<String, Set<String>> map = new HashMap<String, Set<String>>();
-//		IPropertyGetter propertyGetter = model.getPropertyGetter();
-//
-//		for (Synchronization sync : allTheSyncsRegionOfTheFolder) {
-//
-//			try {
-//
-//				Object modelElement = model.getElementById(sync.getId());
-//
-//				String valueOfAttributeInTheModel = (String) propertyGetter.invoke(modelElement, sync.getAttribute());
-//
-//				String valueOfAttributeInSyncRegion = (String) sync.getContent();
-//				//System.out.println("Attribute: " + sync.getAttribute());
-//				//System.out.println(valueOfAttributeInSyncRegion);
-//				//String valueOfAttributeInTheModel = "4";
-//
-//				//String valueOfAttributeInSyncRegion = (String) sync.getContent();
-//
-//				// new array without duplicated values
-//				Set<String> valuesInSyncRegionWithoutDuplactie = new HashSet<>();
-//
-//				// Concatenation Id and attribute in model to have one key
-//				String key = sync.getId() + "." + sync.getAttribute();
-//
-//				valuesInSyncRegionWithoutDuplactie.add(valueOfAttributeInSyncRegion);
-//
-//				if (map.containsKey(key))
-//					map.get(key).add(valueOfAttributeInSyncRegion);
-//				else
-//					map.put(key, valuesInSyncRegionWithoutDuplactie);
-//
-//			} catch (EolRuntimeException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-//
-//		}
-//
-//		for (Map.Entry<String, Set<String>> entry : map.entrySet()) {
-//			String key = entry.getKey();
-//			String[] id_attr = (String[]) key.split("\\.");
-//			String id = id_attr[0];
-//			String attribute = id_attr[1];
-//			ArrayList<String> values = new ArrayList(entry.getValue());
-//			Object modelElement = model.getElementById(id);
-//
-//			String valueOfAttributeInTheModel;
-//			try {
-//				valueOfAttributeInTheModel = (String) propertyGetter.invoke(modelElement, attribute);
-//
-//				if (values.size() == 1) {
-//					if (valueOfAttributeInTheModel.equals(values.get(0))) {
-//
-//						System.out.println("size 1, same value in the model " + valueOfAttributeInTheModel);
-//
-//					} else {
-//						System.out.println("size 1, but differnt value from the one that in the model "
-//								+ valueOfAttributeInTheModel);
-//
-//						Object modelElement1 = model.getElementById(id);
-//						IPropertySetter propertySetter = model.getPropertySetter();
-//						propertySetter.setObject(modelElement1);
-//						propertySetter.setProperty(attribute);
-//						try {
-//							propertySetter.invoke(values.get(0));
-//						} catch (EolRuntimeException e) {
-//							e.printStackTrace();
-//						}
-//						model.store();
-//					}
-//
-//				} else if (values.size() == 2) {
-//
-//					if (valueOfAttributeInTheModel.equals(values.get(0))) {
-//						System.out.println("two different values but one of them same the one that in the model ");
-//						Object modelElement1 = model.getElementById(id);
-//
-//						IPropertySetter propertySetter = model.getPropertySetter();
-//						propertySetter.setObject(modelElement1);
-//						propertySetter.setProperty(attribute);
-//						try {
-//							propertySetter.invoke(values.get(1));
-//						} catch (EolRuntimeException e) {
-//							e.printStackTrace();
-//						}
-//						model.store();
-//
-//					} else if (valueOfAttributeInTheModel.equals(values.get(1))) {
-//						Object modelElement1 = model.getElementById(id);
-//
-//						IPropertySetter propertySetter = model.getPropertySetter();
-//						propertySetter.setObject(modelElement1);
-//						propertySetter.setProperty(attribute);
-//						try {
-//							propertySetter.invoke(values.get(0));
-//						} catch (EolRuntimeException e) {
-//							e.printStackTrace();
-//						}
-//						model.store();
-//
-//					} else {
-//						System.out.println("two different values ");
-//
-//					}
-//
-//				} else {
-//					System.out.println("more than two values");
-//				}
-//			} catch (EolRuntimeException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//				//return false;
-//			}
-//		}
-//		// return true;
-//	}
-//	
-//}
-//
-//
-//
-//
-//
 //
