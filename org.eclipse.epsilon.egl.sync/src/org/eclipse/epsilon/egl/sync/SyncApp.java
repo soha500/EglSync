@@ -17,14 +17,24 @@ public class SyncApp {
 		EmfModel model = new EmfModel();
 		model.setName("M");
 
-		//University Model
-//		model.setMetamodelFile(new File("/Users/sultanalmutairi/Documents/Workspaces/runtime-New_configuration/University-Project/University.ecore").getAbsolutePath());
-//		model.setModelFile(new File("/Users/sultanalmutairi/Documents/Workspaces/runtime-New_configuration/University-Project/University.model").getAbsolutePath());
-
-
 		//University-Last-Project    //this works and automatically generates the files without need to all url and with updating
-		model.setMetamodelFile(new File("SimpleExample/Model-University/University.ecore").getAbsolutePath());
-		model.setModelFile(new File("SimpleExample/Model-University/University.model").getAbsolutePath());	
+		model.setMetamodelFile(new File("SyncTests/Model-University/University.ecore").getAbsolutePath());
+		model.setModelFile(new File("SyncTests/Model-University/University.model").getAbsolutePath());	
+		
+//		// for the boiler test
+//		model.setMetamodelFile(new File("/org.eclipse.epsilon.examples.egl.comps/comps.ecore").getAbsolutePath());
+//		model.setModelFile(new File("/org.eclipse.epsilon.examples.egl.comps/BoilerController.model").getAbsolutePath());
+		
+//		// this is for the boiler test in this workspace == it works
+//		model.setMetamodelFile(new File("/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/boiler/comps.ecore").getAbsolutePath());
+//		model.setModelFile(new File("/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/boiler/BoilerController.model").getAbsolutePath());
+		
+		
+//		// for the boiler test in other workspace
+//		model.setMetamodelFile(new File("/Users/sultanalmutairi/git/Epsilon-Source/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/comps.ecore").getAbsolutePath());
+//		model.setModelFile(new File("/Users/sultanalmutairi/git/Epsilon-Source/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/BoilerController.model").getAbsolutePath());
+
+		
 		model.setReadOnLoad(true);
 		model.setStoredOnDisposal(true);
 		model.load();
@@ -51,6 +61,198 @@ public class SyncApp {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/// Data types
+//int type = 0;
+//
+//Object modelElement = model.getElementById(id);
+//
+//Object valueOfAttributeInTheModel = null;
+//try {
+//
+//	if (propertyGetter.invoke(modelElement, attribute) instanceof String) {
+//
+//		valueOfAttributeInTheModel = propertyGetter.invoke(modelElement, attribute).toString();
+//		type =0;
+//	} else if (propertyGetter.invoke(modelElement, attribute) instanceof Integer) {
+//		valueOfAttributeInTheModel = Integer.parseInt(propertyGetter.invoke(modelElement, attribute).toString());
+//		type =1;	
+//	} 
+//	else if (propertyGetter.invoke(modelElement, attribute) instanceof Double) {
+//		valueOfAttributeInTheModel = Double.parseDouble(propertyGetter.invoke(modelElement, attribute).toString());
+//		type = 2;
+//	}
+//	else if (propertyGetter.invoke(modelElement, attribute) instanceof Float) {
+//
+//		valueOfAttributeInTheModel = Float.parseFloat(propertyGetter.invoke(modelElement, attribute).toString());
+//		type = 3;
+//	}
+//	else if (propertyGetter.invoke(modelElement, attribute) instanceof Boolean) {
+//
+//		valueOfAttributeInTheModel = Boolean.parseBoolean(propertyGetter.invoke(modelElement, attribute).toString());
+//		type = 4;
+//	}
+//	else if (propertyGetter.invoke(modelElement, attribute) instanceof Long) {
+//
+//		valueOfAttributeInTheModel = Long.parseLong(propertyGetter.invoke(modelElement, attribute).toString());
+//		type = 5;
+//	}
+//	else if (propertyGetter.invoke(modelElement, attribute) instanceof Short) {
+//
+//		valueOfAttributeInTheModel = Short.parseShort(propertyGetter.invoke(modelElement, attribute).toString());
+//		type = 6;
+//	}
+//	else if (propertyGetter.invoke(modelElement, attribute) instanceof Byte) {
+//
+//		valueOfAttributeInTheModel = Byte.parseByte(propertyGetter.invoke(modelElement, attribute).toString());
+//		type = 7;
+//	}
+//	else {
+//		System.err.println("Other wrong type");
+//	}
+
+
+
+//try {
+//// Integer.parseInt
+//if (type == 0) {
+//	propertySetter.invoke(values.get(0));		
+//} else
+//if (type == 1) {
+//	propertySetter.invoke(Integer.parseInt(values.get(0)));	
+//} else
+//if (type == 2) {
+//	propertySetter.invoke(Double.parseDouble(values.get(0)));
+//	
+//} else
+//if (type == 3) {
+//	propertySetter.invoke(Float.parseFloat(values.get(0)));
+//} else
+//if (type == 4) {
+//	propertySetter.invoke(Boolean.parseBoolean(values.get(0)));
+//} else
+//if (type == 5) {
+//	propertySetter.invoke(Long.parseLong(values.get(0)));
+//} else
+//if (type == 6) {
+//	propertySetter.invoke(Short.parseShort(values.get(0)));
+//} else
+//if (type == 7) {
+//	propertySetter.invoke(Byte.parseByte(values.get(0)));
+//}
+//
+//} catch (EolRuntimeException e) {
+//e.printStackTrace();
+//}
+
+
+//try {
+//if (type == 0) {
+//	propertySetter.invoke(values.get(1));
+//	
+//}
+//if (type == 1) {
+//	propertySetter.invoke(Integer.parseInt(values.get(1)));	
+//}
+//if (type == 2) {
+//	propertySetter.invoke(Double.parseDouble(values.get(1)));
+//	
+//}
+//if (type == 3) {
+//	propertySetter.invoke(Float.parseFloat(values.get(1)));
+//}
+//if (type == 4) {
+//	propertySetter.invoke(Boolean.parseBoolean(values.get(1)));
+//}
+//if (type == 5) {
+//	propertySetter.invoke(Long.parseLong(values.get(1)));
+//}
+//if (type == 6) {
+//	propertySetter.invoke(Short.parseShort(values.get(1)));
+//}
+//if (type == 7) {
+//	propertySetter.invoke(Byte.parseByte(values.get(1)));
+//}
+//} catch (EolRuntimeException e) {
+//e.printStackTrace();
+//}
+
+
+
+
+//try {
+//	if (type == 0) {
+//		propertySetter.invoke(values.get(0));
+//		
+//	}
+//	if (type == 1) {
+//		propertySetter.invoke(Integer.parseInt(values.get(0)));	
+//	}
+//	if (type == 2) {
+//		propertySetter.invoke(Double.parseDouble(values.get(0)));
+//		
+//	}
+//	if (type == 3) {
+//		propertySetter.invoke(Float.parseFloat(values.get(0)));
+//	}
+//	if (type == 4) {
+//		propertySetter.invoke(Boolean.parseBoolean(values.get(0)));
+//	}
+//	if (type == 5) {
+//		propertySetter.invoke(Long.parseLong(values.get(0)));
+//	}
+//	if (type == 6) {
+//		propertySetter.invoke(Short.parseShort(values.get(0)));
+//	}
+//	if (type == 7) {
+//		propertySetter.invoke(Byte.parseByte(values.get(0)));
+//	}
+//
+//} catch (EolRuntimeException e) {
+//	e.printStackTrace();
+//}
+
+
+
+
+
+//without creating new object call modelElement1 we already create 1 call modelElement in the top of this method
+
+//Object modelElement1 = model.getElementById(id);
+//IPropertySetter propertySetter = model.getPropertySetter();
+//propertySetter.setObject(modelElement1);
+//propertySetter.setProperty(attribute);
 
 
 

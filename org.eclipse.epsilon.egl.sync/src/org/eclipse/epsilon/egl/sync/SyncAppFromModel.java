@@ -20,8 +20,16 @@ import org.junit.Test;
 
 public class SyncAppFromModel {
 	// this works with updating 
-	private static final String FOLDER_PATH ="/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/SimpleExample/GeneratedFilesFromUniversity/Test1";
+	private static final String FOLDER_PATH = System.getProperty("user.dir") + "/SyncTests/GeneratedFilesFromUniversity/Test1";
+//	private static final String FOLDER_PATH ="/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/SimpleExample/GeneratedFilesFromUniversity";
+
+	// this is for the boiler test in this workspace, it works
+	//private static final String FOLDER_PATH ="/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/boiler/src-gen-sync-regions/syncregions";
+
+	// this is for the boiler test in other workspace, it works
+	//private static final String FOLDER_PATH ="/Users/sultanalmutairi/git/Epsilon-Source/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/src-gen-sync-regions/syncregions";
 	
+//	private static final String FOLDER_PATH ="/Users/sultanalmutairi/git/org.eclipse.epsilon.examples.egl.comps/src-gen-sync-regions/syncregions";
 	//this works and automatically generates the files without need to all url but 
 	// dose not work with updating after i added ./ it works with updating
 	//private static final String FOLDER_PATH ="./SimpleExample/GeneratedFilesFromUniversity";
@@ -30,9 +38,23 @@ public class SyncAppFromModel {
 
 		EmfModel model = new EmfModel();
 		model.setName("M");
-		model.setMetamodelFile(new File("SimpleExample/Model-University/University.ecore").getAbsolutePath());
-		model.setModelFile(new File("SimpleExample/Model-University/University.model").getAbsolutePath());
+		// for the university
+		model.setMetamodelFile(new File("SyncTests/Model-University/University.ecore").getAbsolutePath());
+		model.setModelFile(new File("SyncTests/Model-University/University.model").getAbsolutePath());
+	
+//	    System.out.println("Working Directory = " + System.getProperty("user.dir"));
 		
+		// this is for the boiler test in this workspace == it works
+//		model.setMetamodelFile(new File("/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/boiler/comps.ecore").getAbsolutePath());
+//		model.setModelFile(new File("/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/boiler/BoilerController.model").getAbsolutePath());
+	
+		
+//		// for the boiler test in other workspace
+//		model.setMetamodelFile(new File("/Users/sultanalmutairi/git/Epsilon-Source/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/comps.ecore").getAbsolutePath());
+//		model.setModelFile(new File("/Users/sultanalmutairi/git/Epsilon-Source/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/BoilerController.model").getAbsolutePath());
+//		
+
+	
 		model.setReadOnLoad(true);
 		model.setStoredOnDisposal(true);
 

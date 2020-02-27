@@ -44,9 +44,18 @@ public class App {
 
 		//University-Last-Project    //this works and automatically generates the files without need to all url 
 		// and with updating
-		model.setMetamodelFile(new File("SimpleExample/Model-University/University.ecore").getAbsolutePath());
-		model.setModelFile(new File("SimpleExample/Model-University/University.model").getAbsolutePath());
+//		model.setMetamodelFile(new File("SimpleExample/Model-University/University.ecore").getAbsolutePath());
+//		model.setModelFile(new File("SimpleExample/Model-University/University.model").getAbsolutePath());
 		
+		
+		// this is for the boiler test in this workspace == it works
+//		model.setMetamodelFile(new File("/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/boiler/comps.ecore").getAbsolutePath());
+//		model.setModelFile(new File("/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/boiler/BoilerController.model").getAbsolutePath());
+		
+//		// for the boiler test in other workspace
+		model.setMetamodelFile(new File("/Users/sultanalmutairi/git/Epsilon-Source/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/comps.ecore").getAbsolutePath());
+		model.setModelFile(new File("/Users/sultanalmutairi/git/Epsilon-Source/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/BoilerController.model").getAbsolutePath());
+
 		
 		model.setReadOnLoad(true);
 		model.setStoredOnDisposal(false);

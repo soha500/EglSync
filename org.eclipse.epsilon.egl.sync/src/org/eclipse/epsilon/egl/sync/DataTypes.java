@@ -3,16 +3,18 @@ package org.eclipse.epsilon.egl.sync;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-// comprae between all the types 
+import org.eclipse.epsilon.egl.parse.Egx_EolParserRules.returnStatement_return;
+import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
+import org.eclipse.epsilon.eol.execute.introspection.IPropertyGetter;
+import org.eclipse.epsilon.eol.models.IModel;
+
+//comprae between all the types 
 public class DataTypes {
-	// string
-	//
+
 	public boolean isCompatibale(String sFile, String sModel) {
 
 		Object s = getType(sFile);
 		Object m = getType(sModel);
-		// System.out.println(s.getClass().getTypeName());
-		// System.out.println(m.getClass().getTypeName());
 		return s.getClass() == m.getClass();
 
 	}
@@ -68,3 +70,108 @@ public class DataTypes {
 		}
 	}
 }
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////comprae between all the types 
+//public class DataTypes {
+////convet values of attribute to their type
+//public Object getType2(IModel model, IPropertyGetter propertyGetter, String id, String attribute, Object valueOfAttributeInTheModel) {
+//	
+//	Object modelElement = model.getElementById(id);
+//
+//	try {
+//
+//		if (propertyGetter.invoke(modelElement, attribute) instanceof String) {
+//			valueOfAttributeInTheModel = propertyGetter.invoke(modelElement, attribute).toString();	
+//		} else if (propertyGetter.invoke(modelElement, attribute) instanceof Integer) {
+//			valueOfAttributeInTheModel = Integer.parseInt(propertyGetter.invoke(modelElement, attribute).toString());
+//		} 
+//		else if (propertyGetter.invoke(modelElement, attribute) instanceof Double) {
+//			valueOfAttributeInTheModel = Double.parseDouble(propertyGetter.invoke(modelElement, attribute).toString());
+//		}
+//		else if (propertyGetter.invoke(modelElement, attribute) instanceof Float) {
+//
+//			valueOfAttributeInTheModel = Float.parseFloat(propertyGetter.invoke(modelElement, attribute).toString());
+//		}
+//		else if (propertyGetter.invoke(modelElement, attribute) instanceof Boolean) {
+//
+//			valueOfAttributeInTheModel = Boolean.parseBoolean(propertyGetter.invoke(modelElement, attribute).toString());
+//		}
+//		else if (propertyGetter.invoke(modelElement, attribute) instanceof Long) {
+//
+//			valueOfAttributeInTheModel = Long.parseLong(propertyGetter.invoke(modelElement, attribute).toString());
+//		}
+//		else if (propertyGetter.invoke(modelElement, attribute) instanceof Short) {
+//
+//			valueOfAttributeInTheModel = Short.parseShort(propertyGetter.invoke(modelElement, attribute).toString());
+//		}
+//		else if (propertyGetter.invoke(modelElement, attribute) instanceof Byte) {
+//
+//			valueOfAttributeInTheModel = Byte.parseByte(propertyGetter.invoke(modelElement, attribute).toString());
+//		}
+//		else {
+//			System.err.println("Other wrong type");
+//		}
+//	}catch(Exception e){
+//		
+//	}
+//
+//	return valueOfAttributeInTheModel;
+//}
+//// convert value to specific type
+//
+//public Object convert(String type, Object value) {
+//
+//		if (type.contains("String")) {
+//			return String.valueOf(value);		
+//		} else
+//		if (type.contains("Integer")) {
+//			return Integer.parseInt(value.toString());	
+//		} else
+//		if (type.contains("Double")) {
+//			return Double.parseDouble(value.toString());
+//		} else
+//		if (type.contains("Float")) {
+//			return Float.parseFloat(value.toString());
+//		} else
+//		if (type.contains("Boolean")) {
+//			return Boolean.parseBoolean(value.toString());
+//		} else
+//		if (type.contains("Long")) {
+//			return Long.parseLong(value.toString());
+//		} else
+//		if (type.contains("Short")) {
+//			return Short.parseShort(value.toString());
+//		} else
+//		if (type.contains("Byte")) {
+//			return Byte.parseByte(value.toString());
+//		}
+//		return null;
+//}
