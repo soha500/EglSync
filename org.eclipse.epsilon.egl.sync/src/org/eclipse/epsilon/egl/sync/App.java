@@ -8,7 +8,7 @@ import java.io.FileReader;
 import org.eclipse.epsilon.egl.EglFileGeneratingTemplateFactory;
 import org.eclipse.epsilon.egl.EgxModule;
 import org.eclipse.epsilon.egl.output.IOutputBuffer;
-import org.eclipse.epsilon.egl.output.IOutputBufferFactory;
+//import org.eclipse.epsilon.egl.output.IOutputBufferFactory;
 import org.eclipse.epsilon.emc.emf.EmfModel;
 
 public class App {
@@ -55,6 +55,11 @@ public class App {
 //		// for the boiler test in other workspace
 		model.setMetamodelFile(new File("/Users/sultanalmutairi/git/Epsilon-Source/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/comps.ecore").getAbsolutePath());
 		model.setModelFile(new File("/Users/sultanalmutairi/git/Epsilon-Source/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/BoilerController.model").getAbsolutePath());
+		
+//		// for the boiler test in other workspace with relevant path, did not try it yet
+//		model.setMetamodelFile(new File(System.getProperty("user.dir") + "/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/comps.ecore").getAbsolutePath());
+//		model.setModelFile(new File(System.getProperty("user.dir") + "/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/BoilerController.model").getAbsolutePath());
+
 
 		
 		model.setReadOnLoad(true);

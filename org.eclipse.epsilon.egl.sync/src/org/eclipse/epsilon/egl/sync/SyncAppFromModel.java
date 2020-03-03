@@ -20,14 +20,16 @@ import org.junit.Test;
 
 public class SyncAppFromModel {
 	// this works with updating 
-	private static final String FOLDER_PATH = System.getProperty("user.dir") + "/SyncTests/GeneratedFilesFromUniversity/Test1";
-//	private static final String FOLDER_PATH ="/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/SimpleExample/GeneratedFilesFromUniversity";
+//	private static final String FOLDER_PATH = System.getProperty("user.dir") + "/SyncTests/GeneratedFilesFromUniversity/Test1";
+
+	//without Test1
+	private static final String FOLDER_PATH = System.getProperty("user.dir") + "/SyncTests/GeneratedFilesFromUniversity";
 
 	// this is for the boiler test in this workspace, it works
 	//private static final String FOLDER_PATH ="/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/boiler/src-gen-sync-regions/syncregions";
 
 	// this is for the boiler test in other workspace, it works
-	//private static final String FOLDER_PATH ="/Users/sultanalmutairi/git/Epsilon-Source/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/src-gen-sync-regions/syncregions";
+//	private static final String FOLDER_PATH ="/Users/sultanalmutairi/git/Epsilon-Source/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/src-gen-sync-regions/syncregions";
 	
 //	private static final String FOLDER_PATH ="/Users/sultanalmutairi/git/org.eclipse.epsilon.examples.egl.comps/src-gen-sync-regions/syncregions";
 	//this works and automatically generates the files without need to all url but 
@@ -54,6 +56,11 @@ public class SyncAppFromModel {
 //		model.setModelFile(new File("/Users/sultanalmutairi/git/Epsilon-Source/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/BoilerController.model").getAbsolutePath());
 //		
 
+		
+//		// for the boiler test in other workspace with relevant path, did not try it yet
+//		model.setMetamodelFile(new File(System.getProperty("user.dir") + "/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/comps.ecore").getAbsolutePath());
+//		model.setModelFile(new File(System.getProperty("user.dir") + "/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/BoilerController.model").getAbsolutePath());
+//	
 	
 		model.setReadOnLoad(true);
 		model.setStoredOnDisposal(true);

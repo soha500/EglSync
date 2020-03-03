@@ -5,7 +5,7 @@ rule ModuleToHTML
 
 	template : "Module2html.egl"
 
-	target :    "Test11/" + m.name + '.html' 
+	target :    "modules/" + m.name + '.html' 
 	//target :    m.name + '.html' 
 	
 }

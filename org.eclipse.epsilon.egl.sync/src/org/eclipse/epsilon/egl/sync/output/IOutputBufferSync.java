@@ -1,17 +1,17 @@
-package org.eclipse.epsilon.egl.sync.output;
-
-import org.eclipse.epsilon.egl.exceptions.EglRuntimeException;
-import org.eclipse.epsilon.egl.output.IOutputBuffer;
-
-
-import org.eclipse.epsilon.egl.exceptions.EglRuntimeException;
-import org.eclipse.epsilon.egl.exceptions.EglStoppedException;
-import org.eclipse.epsilon.egl.formatter.Formatter;
-import org.eclipse.epsilon.egl.internal.EglPreprocessorModule;
-import org.eclipse.epsilon.egl.preprocessor.Preprocessor;
-
-public interface IOutputBufferSync  {
-}
+//package org.eclipse.epsilon.egl.sync.output;
+//
+//import org.eclipse.epsilon.egl.exceptions.EglRuntimeException;
+//import org.eclipse.epsilon.egl.output.IOutputBuffer;
+//
+//
+//import org.eclipse.epsilon.egl.exceptions.EglRuntimeException;
+//import org.eclipse.epsilon.egl.exceptions.EglStoppedException;
+//import org.eclipse.epsilon.egl.formatter.Formatter;
+////import org.eclipse.epsilon.egl.internal.EglPreprocessorModule;
+//import org.eclipse.epsilon.egl.preprocessor.Preprocessor;
+//
+//public interface IOutputBufferSync  {
+//}
 ////public interface IOutputBufferSync extends IOutputBuffer {
 //		
 //	/**

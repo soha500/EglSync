@@ -14,21 +14,19 @@
 //import org.eclipse.epsilon.egl.exceptions.EglStoppedException;
 //import org.eclipse.epsilon.egl.execute.context.IEglContext;
 //import org.eclipse.epsilon.egl.formatter.Formatter;
-//import org.eclipse.epsilon.egl.internal.EglPreprocessorModule;
 //import org.eclipse.epsilon.egl.merge.output.RegionType;
 //import org.eclipse.epsilon.egl.merge.partition.CommentBlockPartitioner;
 //import org.eclipse.epsilon.egl.preprocessor.Preprocessor;
 //import org.eclipse.epsilon.egl.status.Warning;
 //import org.eclipse.epsilon.egl.sync.merge.partition.CommentBlockPartitionerSync;
-////import org.eclipse.epsilon.egl.sync.CommentBlockPartitionerSync;
 //import org.eclipse.epsilon.egl.util.FileUtil;
 //
-//public class OutputBufferSync extends OutputBuffer implements IOutputBufferSync {
+//public class OutputBufferSync extends OutputBuffer {
 //
 //	protected String lastLine = null;
 //	protected IEglContext context;
 //
-//	protected List<CommentBlockPartitioner> customPartitioners = new LinkedList<CommentBlockPartitioner>();
+//	protected List<CommentBlockPartitionerSync> customPartitioners = new LinkedList<>();
 //	protected boolean hasProtectedRegions = false;
 //	protected boolean hasControlledRegions = false;
 //
@@ -75,7 +73,7 @@
 //		}
 //	}
 //
-//	// startSync() Four-Parameters
+//	// Four-Parameters
 //
 //	public String startSync(String startComment, String endComment, String id, String property)
 //			throws EglRuntimeException {
