@@ -30,38 +30,18 @@ public class App {
 		
 		EmfModel model = new EmfModel();
 		model.setName("M");
-//		model.setMetamodelFile(new File("/Users/sultanalmutairi/Projects/runtime-New_configuration(1)/StateMachineProject/Statemachine.ecore").getAbsolutePath());
-//		model.setModelFile(new File("/Users/sultanalmutairi/Projects/runtime-New_configuration(1)/StateMachineProject/Statemachine.model").getAbsolutePath());
-//		model.setModelFile(new File("/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/Statemachine.model").getAbsolutePath());
+		/*
+		 * this works and automatically generates the files without need to all URL and with updating
+		 */
 		
-		//League Model
-//		model.setMetamodelFile(new File("/Users/sultanalmutairi/Documents/Workspaces/runtime-New_configuration/League/League.ecore").getAbsolutePath());
-//		model.setModelFile(new File("/Users/sultanalmutairi/Documents/Workspaces/runtime-New_configuration/League/League.model").getAbsolutePath());
-
-		//University Model
-//		model.setMetamodelFile(new File("/Users/sultanalmutairi/Documents/Workspaces/runtime-New_configuration/University-Project/University.ecore").getAbsolutePath());
-//		model.setModelFile(new File("/Users/sultanalmutairi/Documents/Workspaces/runtime-New_configuration/University-Project/University.model").getAbsolutePath());
-
-		//University-Last-Project    //this works and automatically generates the files without need to all url 
-		// and with updating
+		//University-Last-Project    
 //		model.setMetamodelFile(new File("SimpleExample/Model-University/University.ecore").getAbsolutePath());
 //		model.setModelFile(new File("SimpleExample/Model-University/University.model").getAbsolutePath());
-		
-		
-		// this is for the boiler test in this workspace == it works
-//		model.setMetamodelFile(new File("/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/boiler/comps.ecore").getAbsolutePath());
-//		model.setModelFile(new File("/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/boiler/BoilerController.model").getAbsolutePath());
 		
 //		// for the boiler test in other workspace
 		model.setMetamodelFile(new File("/Users/sultanalmutairi/git/Epsilon-Source/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/comps.ecore").getAbsolutePath());
 		model.setModelFile(new File("/Users/sultanalmutairi/git/Epsilon-Source/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/BoilerController.model").getAbsolutePath());
-		
-//		// for the boiler test in other workspace with relevant path, did not try it yet
-//		model.setMetamodelFile(new File(System.getProperty("user.dir") + "/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/comps.ecore").getAbsolutePath());
-//		model.setModelFile(new File(System.getProperty("user.dir") + "/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/BoilerController.model").getAbsolutePath());
 
-
-		
 		model.setReadOnLoad(true);
 		model.setStoredOnDisposal(false);
 		model.load();

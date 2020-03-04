@@ -51,7 +51,7 @@ public class SyncTest {
 	 * This is work and the one below also works but in case i avoid breaking test i
 	 * will use this until I need to change it.
 	 */
-	private static final String FOLDER_PATH = System.getProperty("user.dir") + "/SyncTests/GeneratedFilesFromUniversity";
+	private static final String FOLDER_PATH = System.getProperty("user.dir") + "/SyncTests/GeneratedFilesFromUniversity/";
 	
 	EmfModel model;
 	FolderSync syncReader;
@@ -62,34 +62,18 @@ public class SyncTest {
 	public TemporaryFolder tempFolder = new TemporaryFolder();
 
 	@Before
-	public void init() {
-		/*
-		 * This works and automatically generates the files without need to all URL for
-		 * the Ecore and Model as well.
-		 */
-		model = new EmfModel();
-		model.setName("M");
-		model.setMetamodelFile(new File(System.getProperty("user.dir") + "/SyncTests/Model-University/University.ecore").getAbsolutePath());
-		model.setModelFile(new File(System.getProperty("user.dir") + "/SyncTests/Model-University/University.model").getAbsolutePath());
-		model.setReadOnLoad(true);
-		model.setStoredOnDisposal(true);
-		try {
-			model.load();
-		} catch (EolModelLoadingException e2) {
-			e2.printStackTrace();
-		}
-		syncReader = new FolderSync();
-		
+	public void init() throws IOException {
+
 		/*
 		 * For temporary copy of the model
 		 */
 		
 		File orginalFile = new File(System.getProperty("user.dir") + "/SyncTests/Model-University/University.model");
-		File tempFile = new File(System.getProperty("user.dir") + "/SyncTests/Model-University/tempUni.model");
+//		File tempFile = new File(System.getProperty("user.dir") + "/SyncTests/Model-University/tempUni.model");
+		File tempFile = tempFolder.newFile("tempUni.model");
 		try {
 			Files.copy(orginalFile.toPath(), tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -126,7 +110,7 @@ public class SyncTest {
 		}
 	}
 
-	@Test
+//	@Test
 	public void runTheGenerator() {
 		/*
 		 * IEolModule module = createModule(); // The createModule() method follows
@@ -157,14 +141,8 @@ public class SyncTest {
 	
 	@Test
 	public void test1() throws IOException {
-		/*
-		 * Here I passed the model in temporary file, But I commented here and added in the inti() method 
-		 * in the top also the last line for deleting the temporary tempUni i took it and put it in the top
-		 * I did this for each the first three test, but the rest it used to work but when i added the temp file 
-		 * it broke.
-		 */
 		System.out.println("\n Test 1 : One sync region with the same value in the model\n");
-
+		
 		String pathString = FOLDER_PATH + "/Test1/MDE101.html";
 
 		Path path = Paths.get(pathString);
@@ -206,9 +184,8 @@ public class SyncTest {
 		}
 
 		assertEquals("test 1", "hello", valueOfAttributeInTheModel);
-
 	}
-	
+		
 	/*
 	 * Scenario 2, There is one sync region with different value from the one in the model.
 	 */
@@ -216,7 +193,7 @@ public class SyncTest {
 	@Test
 	public void test2() throws IOException {
 		System.out.println("\n Test 2 : One sync region with different value from the one in the model.\n");
-
+		
 		String pathString = FOLDER_PATH + "/Test2/MDE102.html";
 
 		Path path = Paths.get(pathString);
@@ -283,10 +260,9 @@ public class SyncTest {
 				if (count == 0) {
 					newLines.add("hello");
 					count = 1;
-				} else {
+				}  else {
 					newLines.add("hello");
 				}
-				count = 2;
 
 				while (!line.contains("//endSync"))
 					line = original.readLine();
@@ -319,7 +295,7 @@ public class SyncTest {
 	@Test
 	public void test4() throws IOException {
 		System.out.println("\n Test 4 : Two sync regions with one different value from the one in the model.\n");
-
+		
 		String pathString = FOLDER_PATH + "/Test4/MDE104.html";
 		Path path = Paths.get(pathString);
 		BufferedReader original = new BufferedReader(new FileReader(pathString));
@@ -336,10 +312,10 @@ public class SyncTest {
 				if (count == 0) {
 					newLines.add("hi");
 					count = 1;
-				} else {
+				}  else {
 					newLines.add("hi");
-					count = 2;
-				}	
+				}
+
 				while (!line.contains("//endSync"))
 					line = original.readLine();
 				newLines.add(line);
@@ -372,8 +348,64 @@ public class SyncTest {
 	@Test
 	public void test5() throws IOException {
 		System.out.println("\n Test 5 : Two sync regions but have one different value from the one in the model.\n");
-
+		
 		String pathString = FOLDER_PATH + "/Test5/MDE105.html";
+		Path path = Paths.get(pathString);
+
+		BufferedReader original = new BufferedReader(new FileReader(pathString));
+		String line;
+		List<String> newLines = new LinkedList<String>();
+		int count = 0;
+
+		while ((line = original.readLine()) != null)
+			if (!line.contains("//sync _OeCHMPxQEemsbtndia47ww, description"))
+				newLines.add(line);
+			else {
+				newLines.add(line);
+				if (count == 0) {
+					newLines.add("hello");
+					count = 1;
+				}  else {
+					newLines.add("hi");
+				}
+
+				while (!line.contains("//endSync"))
+					line = original.readLine();
+				newLines.add(line);
+
+			}
+		original.close();
+
+		Files.write(path, newLines);
+
+		FolderSync folderSync = new FolderSync();
+		System.out.println();
+		folderSync.getSynchronization(FOLDER_PATH + "/Test5/", tempModel);
+
+		//tempModel.store();
+		IPropertyGetter propertyGetter = tempModel.getPropertyGetter();
+		Object modelElement = tempModel.getElementById("_OeCHMPxQEemsbtndia47ww");
+		String valueOfAttributeInTheModel = null;
+		try {
+			valueOfAttributeInTheModel = (String) propertyGetter.invoke(modelElement, "description");
+		} catch (EolRuntimeException e) {
+			e.printStackTrace();
+		}
+
+		assertEquals("test 5", "hi", valueOfAttributeInTheModel);
+	}
+	
+	/*
+	 * Scenario 6, There are two sync regions but have two different values from the one in the model.
+	 * I commented the notation @Test because this test contains two or more different values 
+	 * from the one in the model and it breaks the following tests 
+	 */
+
+//	@Test
+	public void test6() throws IOException {
+		System.out.println("\n Test 6 : Two sync regions but have also two different values from the one in the model.\n");
+
+		String pathString = FOLDER_PATH + "/Test6/MDE106.html";
 
 		Path path = Paths.get(pathString);
 
@@ -391,7 +423,7 @@ public class SyncTest {
 					newLines.add("hi");
 					count = 1;
 				} else {
-					newLines.add("hello");
+					newLines.add("welcome");
 				}
 				count = 2;
 
@@ -405,7 +437,7 @@ public class SyncTest {
 		Files.write(path, newLines);
 
 		FolderSync folderSync = new FolderSync();
-		folderSync.getSynchronization(FOLDER_PATH + "/Test5/", tempModel);
+		folderSync.getSynchronization(FOLDER_PATH + "/Test6/", tempModel);
 
 		tempModel.store();
 		IPropertyGetter propertyGetter = tempModel.getPropertyGetter();
@@ -416,65 +448,8 @@ public class SyncTest {
 		} catch (EolRuntimeException e) {
 			e.printStackTrace();
 		}
-
-//		assertEquals("test 5", "hi", valueOfAttributeInTheModel);
-		assertEquals("test 5", "hello", valueOfAttributeInTheModel);
-
-	}
-
-	/*
-	 * Scenario 6, There are two sync regions but have two different values from the one in the model.
-	 */
-
-	@Test
-	public void test6() throws IOException {
-//		System.out.println("\n Test 6 : Two sync regions but have also two different values from the one in the model.\n");
-//
-//		String pathString = FOLDER_PATH + "/Test6/MDE106.html";
-//
-//		Path path = Paths.get(pathString);
-//
-//		BufferedReader original = new BufferedReader(new FileReader(pathString));
-//		String line;
-//		List<String> newLines = new LinkedList<String>();
-//		int count = 0;
-//
-//		while ((line = original.readLine()) != null)
-//			if (!line.contains("//sync _OeCHMPxQEemsbtndia47ww, description"))
-//				newLines.add(line);
-//			else {
-//				newLines.add(line);
-//				if (count == 0) {
-//					newLines.add("hi");
-//					count = 1;
-//				} else {
-//					newLines.add("welcome");
-//				}
-//				count = 2;
-//
-//				while (!line.contains("//endSync"))
-//					line = original.readLine();
-//				newLines.add(line);
-//
-//			}
-//		original.close();
-//
-//		Files.write(path, newLines);
-//
-//		FolderSync folderSync = new FolderSync();
-//		folderSync.getSynchronization(FOLDER_PATH + "/Test6/", tempModel);
-//
-//		tempModel.store();
-//		IPropertyGetter propertyGetter = tempModel.getPropertyGetter();
-//		Object modelElement = tempModel.getElementById("_OeCHMPxQEemsbtndia47ww");
-//		String valueOfAttributeInTheModel = null;
-//		try {
-//			valueOfAttributeInTheModel = (String) propertyGetter.invoke(modelElement, "description");
-//		} catch (EolRuntimeException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		assertEquals("test 6", "hello", valueOfAttributeInTheModel);
+		
+		assertEquals("test 6", "hello", valueOfAttributeInTheModel);
 	}
 
 	/*
@@ -646,65 +621,71 @@ public class SyncTest {
 			e.printStackTrace();
 		}
 
-//		assertEquals("test 9", "hi", valueOfAttributeInTheModel);
-		assertEquals("test 9", "hello", valueOfAttributeInTheModel);
+		assertEquals("test 9", "hi", valueOfAttributeInTheModel);
 
 	}
+	
 	/*
 	 * Scenario 10, There are three sync regions but with two or more different values from the value in the model.
+	 * I commented the notation @Test because this test contains two or more different values 
+	 * from the one in the model and it breaks the following tests. 
 	 */
 
-	@Test
+//	@Test
 	public void test10() throws IOException {
-//		System.out.println("\n Test 10 : Three sync regions but with two or more different values from the value in the model.\n");
-//
-//		String pathString = FOLDER_PATH + "/Test10/MDE10.html";
-//
-//		Path path = Paths.get(pathString);
-//
-//		BufferedReader original = new BufferedReader(new FileReader(pathString));
-//		String line;
-//		List<String> newLines = new LinkedList<String>();
-//		int count = 0;
-//
-//		while ((line = original.readLine()) != null)
-//			if (!line.contains("//sync _OeCHMPxQEemsbtndia47ww, description"))
-//				newLines.add(line);
-//			else {
-//				newLines.add(line);
-//				if (count == 0) {
-//					newLines.add("hi");
-//					count = 1;
-//				} else if (count == 1) {
-//					newLines.add("bye");
-//					count = 2;
-//				}  else {
-//					newLines.add("welcome");
-//				}
-//
-//				while (!line.contains("//endSync"))
-//					line = original.readLine();
-//				newLines.add(line);
-//
-//			}
-//		original.close();
-//
-//		Files.write(path, newLines);
-//
-//		FolderSync folderSync = new FolderSync();
-//		folderSync.getSynchronization(FOLDER_PATH + "/Test10/", tempModel);
-//
-//		tempModel.store();
-//		IPropertyGetter propertyGetter = tempModel.getPropertyGetter();
-//		Object modelElement = tempModel.getElementById("_OeCHMPxQEemsbtndia47ww");
-//		String valueOfAttributeInTheModel = null;
-//		try {
-//			valueOfAttributeInTheModel = (String) propertyGetter.invoke(modelElement, "description");
-//		} catch (EolRuntimeException e) {
-//			e.printStackTrace();
-//		}
-//
-//		assertEquals("test 10", "hello", valueOfAttributeInTheModel);
+		/*
+		 * I commented the notation @Test because this test contains two or more different values 
+		 * from the one in the model and it breaks the following tests 
+		 */
+		System.out.println("\n Test 10 : Three sync regions but with two or more different values from the value in the model.\n");
+
+		String pathString = FOLDER_PATH + "/Test10/MDE10.html";
+
+		Path path = Paths.get(pathString);
+
+		BufferedReader original = new BufferedReader(new FileReader(pathString));
+		String line;
+		List<String> newLines = new LinkedList<String>();
+		int count = 0;
+
+		while ((line = original.readLine()) != null)
+			if (!line.contains("//sync _OeCHMPxQEemsbtndia47ww, description"))
+				newLines.add(line);
+			else {
+				newLines.add(line);
+				if (count == 0) {
+					newLines.add("hi");
+					count = 1;
+				} else if (count == 1) {
+					newLines.add("bye");
+					count = 2;
+				}  else {
+					newLines.add("welcome");
+				}
+
+				while (!line.contains("//endSync"))
+					line = original.readLine();
+				newLines.add(line);
+
+			}
+		original.close();
+
+		Files.write(path, newLines);
+
+		FolderSync folderSync = new FolderSync();
+		folderSync.getSynchronization(FOLDER_PATH + "/Test10/", tempModel);
+
+		tempModel.store();
+		IPropertyGetter propertyGetter = tempModel.getPropertyGetter();
+		Object modelElement = tempModel.getElementById("_OeCHMPxQEemsbtndia47ww");
+		String valueOfAttributeInTheModel = null;
+		try {
+			valueOfAttributeInTheModel = (String) propertyGetter.invoke(modelElement, "description");
+		} catch (EolRuntimeException e) {
+			e.printStackTrace();
+		}
+
+		assertEquals("test 10", "hello", valueOfAttributeInTheModel);
 	}
 
 	/*
@@ -731,7 +712,7 @@ public class SyncTest {
 
 		String pathString = FOLDER_PATH + "/Test12/";
 		syncReader = new FolderSync();
-		String valueOfAttributeInTheModel = syncReader.getSynchronization(pathString, model);
+		String valueOfAttributeInTheModel = syncReader.getSynchronization(pathString, tempModel);
 
 		assertEquals("test 12", "The respective attribute is not found", valueOfAttributeInTheModel);
 	}
@@ -745,7 +726,7 @@ public class SyncTest {
 
 		String pathString = FOLDER_PATH + "/Test13/";
 		syncReader = new FolderSync();
-		String valueOfAttributeInTheModel = syncReader.getSynchronization(pathString, model);
+		String valueOfAttributeInTheModel = syncReader.getSynchronization(pathString, tempModel);
 
 		assertEquals("test 13", "Misformated or incompleted", valueOfAttributeInTheModel);
 	}
@@ -760,7 +741,7 @@ public class SyncTest {
 
 		String pathString = FOLDER_PATH + "/Test14/";
 		syncReader = new FolderSync();
-		String valueOfAttributeInTheModel = syncReader.getSynchronization(pathString, model);
+		String valueOfAttributeInTheModel = syncReader.getSynchronization(pathString, tempModel);
 
 		assertEquals("test 14", "Incompatible type", valueOfAttributeInTheModel);
 	}
@@ -795,35 +776,375 @@ public class SyncTest {
 
 
 
+//@Test
+//public void test1() throws IOException {
+//	/*
+//	 * Here I passed the model in temporary file, But I commented here and added in the inti() method 
+//	 * in the top also the last line for deleting the temporary tempUni i took it and put it in the top
+//	 * I did this for each the first three test, but the rest it used to work but when i added the temp file 
+//	 * it broke.
+//	 */
+//	System.out.println("\n Test 1 : One sync region with the same value in the model\n");
+//	
+//	
+//	File orginalFile = new File(System.getProperty("user.dir") + "/SyncTests/Model-University/University.model");
+//	File tempFile = new File(System.getProperty("user.dir") + "/SyncTests/GeneratedFilesFromUniversity/Test1/temp101.model");
+//	try {
+//		Files.copy(orginalFile.toPath(), tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+//	} catch (IOException e) {
+//		e.printStackTrace();
+//	}
+//
+//	tempModel = new EmfModel();
+//	tempModel.setName("M");
+//	tempModel.setMetamodelFile(new File(System.getProperty("user.dir") + "/SyncTests/Model-University/University.ecore").getAbsolutePath());
+//	tempModel.setModelFile(tempFile.getAbsolutePath());
+//	tempModel.setReadOnLoad(true);
+//
+//	try {
+//		tempModel.load();
+//	} catch (EolModelLoadingException e2) {
+//		e2.printStackTrace();
+//	}
+//	//tempFile.deleteOnExit();
+//	
+//	String pathString = FOLDER_PATH + "/Test1/MDE101.html";
+//
+//	Path path = Paths.get(pathString);
+//	BufferedReader original = new BufferedReader(new FileReader(pathString));
+//
+//	String line;
+//
+//	List<String> newLines = new LinkedList<String>();
+//
+//	while ((line = original.readLine()) != null)
+//		if (!line.contains("//sync _OeCHMPxQEemsbtndia47ww, description"))
+//			newLines.add(line);
+//		else {
+//			newLines.add(line);
+//			newLines.add("hello");
+//
+//			while (!line.contains("//endSync"))
+//				line = original.readLine();
+//			newLines.add(line);
+//
+//		}
+//
+//	original.close();
+//	Files.write(path, newLines);
+//	
+//	// Update the model with values taken from the generated file.
+//	FolderSync folderSync = new FolderSync();
+//	folderSync.getSynchronization(FOLDER_PATH + "/Test1/", tempModel);
+//
+//	// Now that you are done, go to the model and check if the value is updated.
+//	tempModel.store();
+//	IPropertyGetter propertyGetter = tempModel.getPropertyGetter();
+//	Object modelElement = tempModel.getElementById("_OeCHMPxQEemsbtndia47ww");
+//	String valueOfAttributeInTheModel = null;
+//	try {
+//		valueOfAttributeInTheModel = (String) propertyGetter.invoke(modelElement, "description");
+//	} catch (EolRuntimeException e) {
+//		e.printStackTrace();
+//	}
+//
+//	assertEquals("test 1", "hello", valueOfAttributeInTheModel);
+////	tempFile.deleteOnExit();
+//
+//}
+//
+//
+///*
+// * Scenario 2, There is one sync region with different value from the one in the model.
+// */
+//
+//@Test
+//public void test2() throws IOException {
+//	System.out.println("\n Test 2 : One sync region with different value from the one in the model.\n");
+//	
+//	File orginalFile = new File(System.getProperty("user.dir") + "/SyncTests/Model-University/University.model");
+//	File tempFile = new File(System.getProperty("user.dir") + "/SyncTests/GeneratedFilesFromUniversity/Test2/temp102.model");
+//	try {
+//		Files.copy(orginalFile.toPath(), tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+//	} catch (IOException e) {
+//		e.printStackTrace();
+//	}
+//
+//	tempModel = new EmfModel();
+//	tempModel.setName("M");
+//	tempModel.setMetamodelFile(new File(System.getProperty("user.dir") + "/SyncTests/Model-University/University.ecore").getAbsolutePath());
+//	tempModel.setModelFile(tempFile.getAbsolutePath());
+//	tempModel.setReadOnLoad(true);
+//
+//	try {
+//		tempModel.load();
+//	} catch (EolModelLoadingException e2) {
+//		e2.printStackTrace();
+//	}
+//	String pathString = FOLDER_PATH + "/Test2/MDE102.html";
+//
+//	Path path = Paths.get(pathString);
+//	BufferedReader original = new BufferedReader(new FileReader(pathString));
+//
+//	String line;
+//
+//	List<String> newLines = new LinkedList<String>();
+//
+//	while ((line = original.readLine()) != null)
+//		if (!line.contains("//sync _OeCHMPxQEemsbtndia47ww, description"))
+//			newLines.add(line);
+//		else {
+//			newLines.add(line);
+//			newLines.add("hi");
+//
+//			while (!line.contains("//endSync"))
+//				line = original.readLine();
+//			newLines.add(line);
+//
+//		}
+//
+//	original.close();
+//	Files.write(path, newLines);
+//
+//	FolderSync folderSync = new FolderSync();
+//	folderSync.getSynchronization(FOLDER_PATH + "/Test2/", tempModel);
+//	
+//	tempModel.store();
+//	IPropertyGetter propertyGetter = tempModel.getPropertyGetter();
+//	Object modelElement = tempModel.getElementById("_OeCHMPxQEemsbtndia47ww");
+//	String valueOfAttributeInTheModel = null;
+//	try {
+//		valueOfAttributeInTheModel = (String) propertyGetter.invoke(modelElement, "description");
+//	} catch (EolRuntimeException e) {
+//		e.printStackTrace();
+//	}
+//
+//	assertEquals("test 2", "hi", valueOfAttributeInTheModel);
+////	tempFile.deleteOnExit();
+//
+//}
+//
+///*
+// * Scenario 3, There are two sync regions with the same value from the one in the model.
+// */
+//
+//@Test
+//public void test3() throws IOException {
+//	System.out.println("\n Test 3 : Two sync regions with the same values from the one in the model.\n");
+//	
+//	File orginalFile = new File(System.getProperty("user.dir") + "/SyncTests/Model-University/University.model");
+//	File tempFile = new File(System.getProperty("user.dir") + "/SyncTests/GeneratedFilesFromUniversity/Test3/temp103.model");
+//	try {
+//		Files.copy(orginalFile.toPath(), tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+//	} catch (IOException e) {
+//		e.printStackTrace();
+//	}
+//
+//	tempModel = new EmfModel();
+//	tempModel.setName("M");
+//	tempModel.setMetamodelFile(new File(System.getProperty("user.dir") + "/SyncTests/Model-University/University.ecore").getAbsolutePath());
+//	tempModel.setModelFile(tempFile.getAbsolutePath());
+//	tempModel.setReadOnLoad(true);
+//
+//	try {
+//		tempModel.load();
+//	} catch (EolModelLoadingException e2) {
+//		e2.printStackTrace();
+//	}
+//	String pathString = FOLDER_PATH + "/Test3/MDE103.html";
+//
+//	Path path = Paths.get(pathString);
+//
+//	BufferedReader original = new BufferedReader(new FileReader(pathString));
+//	String line;
+//	List<String> newLines = new LinkedList<String>();
+//	int count = 0;
+//
+//	while ((line = original.readLine()) != null)
+//		if (!line.contains("//sync _OeCHMPxQEemsbtndia47ww, description"))
+//			newLines.add(line);
+//		else {
+//			newLines.add(line);
+//			if (count == 0) {
+//				newLines.add("hello");
+//				count = 1;
+//			}  else {
+//				newLines.add("hello");
+//			}
+//
+//			while (!line.contains("//endSync"))
+//				line = original.readLine();
+//			newLines.add(line);
+//		}
+//	original.close();
+//
+//	Files.write(path, newLines);
+//
+//	FolderSync folderSync = new FolderSync();
+//	folderSync.getSynchronization(FOLDER_PATH + "/Test3/", tempModel);
+//
+//	tempModel.store();
+//	IPropertyGetter propertyGetter = tempModel.getPropertyGetter();
+//	Object modelElement = tempModel.getElementById("_OeCHMPxQEemsbtndia47ww");
+//	String valueOfAttributeInTheModel = null;
+//	try {
+//		valueOfAttributeInTheModel = (String) propertyGetter.invoke(modelElement, "description");
+//	} catch (EolRuntimeException e) {
+//		e.printStackTrace();
+//	}
+//
+//	assertEquals("test 3", "hello", valueOfAttributeInTheModel);
+////	tempFile.deleteOnExit();
+//
+//}
+//
+///*
+// * Scenario 4, There are two sync regions with one different value from the one in the model.
+// */
+//
+//@Test
+//public void test4() throws IOException {
+//	System.out.println("\n Test 4 : Two sync regions with one different value from the one in the model.\n");
+//	
+//	File orginalFile = new File(System.getProperty("user.dir") + "/SyncTests/Model-University/University.model");
+//	File tempFile = new File(System.getProperty("user.dir") + "/SyncTests/GeneratedFilesFromUniversity/Test4/temp104.model");
+//	try {
+//		Files.copy(orginalFile.toPath(), tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+//	} catch (IOException e) {
+//		e.printStackTrace();
+//	}
+//
+//	tempModel = new EmfModel();
+//	tempModel.setName("M");
+//	tempModel.setMetamodelFile(new File(System.getProperty("user.dir") + "/SyncTests/Model-University/University.ecore").getAbsolutePath());
+//	tempModel.setModelFile(tempFile.getAbsolutePath());
+//	tempModel.setReadOnLoad(true);
+//
+//	try {
+//		tempModel.load();
+//	} catch (EolModelLoadingException e2) {
+//		e2.printStackTrace();
+//	}
+//	String pathString = FOLDER_PATH + "/Test4/MDE104.html";
+//	Path path = Paths.get(pathString);
+//	BufferedReader original = new BufferedReader(new FileReader(pathString));
+//
+//	String line;
+//	List<String> newLines = new LinkedList<String>();
+//	int count = 0;
+//
+//	while ((line = original.readLine()) != null)
+//		if (!line.contains("//sync _OeCHMPxQEemsbtndia47ww, description"))
+//			newLines.add(line);
+//		else {
+//			newLines.add(line);
+//			if (count == 0) {
+//				newLines.add("hi");
+//				count = 1;
+//			}  else {
+//				newLines.add("hi");
+//			}
+//
+//			while (!line.contains("//endSync"))
+//				line = original.readLine();
+//			newLines.add(line);
+//
+//		}
+//
+//	original.close();
+//	Files.write(path, newLines);
+//
+//	FolderSync folderSync = new FolderSync();
+//	folderSync.getSynchronization(FOLDER_PATH + "/Test4/", tempModel);
+//	
+//	tempModel.store();
+//	IPropertyGetter propertyGetter = tempModel.getPropertyGetter();
+//	Object modelElement = tempModel.getElementById("_OeCHMPxQEemsbtndia47ww");
+//	String valueOfAttributeInTheModel = null;
+//	try {
+//		valueOfAttributeInTheModel = (String) propertyGetter.invoke(modelElement, "description");
+//	} catch (EolRuntimeException e) {
+//		e.printStackTrace();
+//	}
+//
+//	assertEquals("test 4", "hi", valueOfAttributeInTheModel);
+////	tempFile.deleteOnExit();
+//}
+//
+///*
+// * Scenario 5, There are two sync regions but have one different value from the one in the model.
+// */
+//
+//@Test
+//public void test5() throws IOException {
+//	System.out.println("\n Test 5 : Two sync regions but have one different value from the one in the model.\n");
+//	
+//	File orginalFile = new File(System.getProperty("user.dir") + "/SyncTests/Model-University/University.model");
+//	File tempFile = new File(System.getProperty("user.dir") + "/SyncTests/GeneratedFilesFromUniversity/Test5/temp105.model");
+//	try {
+//		Files.copy(orginalFile.toPath(), tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+//	} catch (IOException e) {
+//		e.printStackTrace();
+//	}
+//
+//	tempModel = new EmfModel();
+//	tempModel.setName("M");
+//	tempModel.setMetamodelFile(new File(System.getProperty("user.dir") + "/SyncTests/Model-University/University.ecore").getAbsolutePath());
+//	tempModel.setModelFile(tempFile.getAbsolutePath());
+//	tempModel.setReadOnLoad(true);
+//
+//	try {
+//		tempModel.load();
+//	} catch (EolModelLoadingException e2) {
+//		e2.printStackTrace();
+//	}
+//	String pathString = FOLDER_PATH + "/Test5/MDE105.html";
+//	Path path = Paths.get(pathString);
+//
+//	BufferedReader original = new BufferedReader(new FileReader(pathString));
+//	String line;
+//	List<String> newLines = new LinkedList<String>();
+//	int count = 0;
+//
+//	while ((line = original.readLine()) != null)
+//		if (!line.contains("//sync _OeCHMPxQEemsbtndia47ww, description"))
+//			newLines.add(line);
+//		else {
+//			newLines.add(line);
+//			if (count == 0) {
+//				newLines.add("hello");
+//				count = 1;
+//			}  else {
+//				newLines.add("hi");
+//			}
+//
+//			while (!line.contains("//endSync"))
+//				line = original.readLine();
+//			newLines.add(line);
+//
+//		}
+//	original.close();
+//
+//	Files.write(path, newLines);
+//
+//	FolderSync folderSync = new FolderSync();
+//	System.out.println();
+//	folderSync.getSynchronization(FOLDER_PATH + "/Test5/", tempModel);
+//
+//	//tempModel.store();
+//	IPropertyGetter propertyGetter = tempModel.getPropertyGetter();
+//	Object modelElement = tempModel.getElementById("_OeCHMPxQEemsbtndia47ww");
+//	String valueOfAttributeInTheModel = null;
+//	try {
+//		valueOfAttributeInTheModel = (String) propertyGetter.invoke(modelElement, "description");
+//	} catch (EolRuntimeException e) {
+//		e.printStackTrace();
+//	}
+//
+//	assertEquals("test 5", "hi", valueOfAttributeInTheModel);
+////	tempFile.deleteOnExit();
+//}
+//
+//}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
- * before test 2 File tempFile = tempFolder.newFile("file.txt"); File tempFolder
- * = tempFolder.newFolder("folder"); // System.out.println("Test folder: " +
- * testFolder.getRoot());
- * 
- * // Create a temporary file. final File tempFile =
- * tempFolder.newFile("tempFile.txt");
- * 
- * // Write something to it. FileUtils.writeStringToFile(tempFile,
- * "hello world");
- * 
- * // Read it from temp file final String s =
- * FileUtils.readFileToString(tempFile);
- * 
- * // Verify the content Assert.assertEquals("hello world", s); //Note: File is
- * guaranteed to be deleted after the test finishes.
- */
