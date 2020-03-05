@@ -722,6 +722,7 @@ public class SyncTest {
 	/*
 	 * Scenario 13, if the respective attribute was deleted from the model.
 	 */
+	
 	@Test
 	public void test13() throws IOException {
 		System.out.println("\n Test 13 : if the respective attribute was deleted from the model.\n");
@@ -747,9 +748,11 @@ public class SyncTest {
 
 		assertEquals("test 14", "Incompatible type", valueOfAttributeInTheModel);
 	}
+	
 	/*
 	 * Test integer type, There is one sync region but has different values from the value in the model.
 	 */
+	
 	@Test
 	public void test15() throws IOException {
 		/*
@@ -917,10 +920,6 @@ public class SyncTest {
 	
 	@Test
 	public void test18() throws IOException {
-		/*
-		 * I commented the notation @Test because this test contains two or more different values 
-		 * from the one in the model and it breaks the following tests 
-		 */
 		System.out.println("\n Test 18 : There is one sync region but has different values from the value in the model.\n");
 
 		String pathString = FOLDER_PATH + "/Test18/MDE18.html";
@@ -1074,6 +1073,7 @@ public class SyncTest {
 		}
 		Assert.assertEquals(new BigDecimal(50.5), new BigDecimal(valueOfAttributeInTheModel));
 	}
+	
 	/*
 	 * Test Double type, There is one sync region, but has one different value of different type.
 	 */
@@ -1118,4 +1118,104 @@ public class SyncTest {
 		Assert.assertEquals(new BigDecimal(50.5), new BigDecimal(valueOfAttributeInTheModel));
 	}
 	
+	/* 
+	 * Test Boolean type, There is one sync region and has the same value from the value in the model.
+	 */
+	
+	@Test
+	public void test22() throws IOException {
+		System.out.println("\n Test 22 : There is one sync region and has the same value from the value in the model.\n");
+
+		String pathString = FOLDER_PATH + "/Test22/MDE22.html";
+
+		Path path = Paths.get(pathString);
+
+		BufferedReader original = new BufferedReader(new FileReader(pathString));
+		String line;
+		List<String> newLines = new LinkedList<String>();
+
+		while ((line = original.readLine()) != null)
+			if (!line.contains("//sync _OeCHMPxQEemsbtndia47ww, compulsory"))
+				newLines.add(line);
+			else {
+				newLines.add(line);
+				newLines.add("true");
+			
+
+				while (!line.contains("//endSync"))
+					line = original.readLine();
+				newLines.add(line);
+
+			}
+		original.close();
+
+		Files.write(path, newLines);
+
+		FolderSync folderSync = new FolderSync();
+		folderSync.getSynchronization(FOLDER_PATH + "/Test22/", tempModel);
+
+		tempModel.store();
+		IPropertyGetter propertyGetter = tempModel.getPropertyGetter();
+		Object modelElement = tempModel.getElementById("_OeCHMPxQEemsbtndia47ww");
+		Boolean valueOfAttributeInTheModel = null;
+		try {
+			valueOfAttributeInTheModel = (Boolean) propertyGetter.invoke(modelElement, "compulsory");
+		} catch (EolRuntimeException e) {
+			e.printStackTrace();
+		}
+		//assertEquals("test 22", "true", valueOfAttributeInTheModel);
+		//assertTrue(true , valueOfAttributeInTheModel);
+		assertSame(true , valueOfAttributeInTheModel);
+		
+	}
+	
+	/* 
+	 * Test Boolean type, There is one sync region but has different value from the value in the model.
+	 */
+	
+	@Test
+	public void test23() throws IOException {
+		System.out.println("\n Test 23 : There is one sync region but has different value from the value in the model.\n");
+
+		String pathString = FOLDER_PATH + "/Test23/MDE23.html";
+
+		Path path = Paths.get(pathString);
+
+		BufferedReader original = new BufferedReader(new FileReader(pathString));
+		String line;
+		List<String> newLines = new LinkedList<String>();
+
+		while ((line = original.readLine()) != null)
+			if (!line.contains("//sync _OeCHMPxQEemsbtndia47ww, compulsory"))
+				newLines.add(line);
+			else {
+				newLines.add(line);
+				newLines.add("false");
+			
+
+				while (!line.contains("//endSync"))
+					line = original.readLine();
+				newLines.add(line);
+
+			}
+		original.close();
+
+		Files.write(path, newLines);
+
+		FolderSync folderSync = new FolderSync();
+		folderSync.getSynchronization(FOLDER_PATH + "/Test23/", tempModel);
+
+		tempModel.store();
+		IPropertyGetter propertyGetter = tempModel.getPropertyGetter();
+		Object modelElement = tempModel.getElementById("_OeCHMPxQEemsbtndia47ww");
+		Boolean valueOfAttributeInTheModel = null;
+		try {
+			valueOfAttributeInTheModel = (Boolean) propertyGetter.invoke(modelElement, "compulsory");
+		} catch (EolRuntimeException e) {
+			e.printStackTrace();
+		}
+		
+		assertSame(false , valueOfAttributeInTheModel);	
+	}
+
 }
