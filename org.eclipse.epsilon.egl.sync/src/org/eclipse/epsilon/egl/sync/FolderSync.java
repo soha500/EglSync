@@ -1,4 +1,3 @@
-
 package org.eclipse.epsilon.egl.sync;
 
 import java.io.IOException;
@@ -50,10 +49,6 @@ public class FolderSync {
 				List<String> content = Files.readAllLines(Paths.get(file));
 
 				namesAndContents.put(file, content);
-//				FileSync fileSync = new FileSync(file);
-//				List<Synchronization> syncRegionsOfThisFile = fileSync.getAllTheSyncRegionsOfTheFile();
-//				allTheSyncRegionsInTheFolder.addAll(syncRegionsOfThisFile);
-				// new
 				FileSync fileSync = new FileSync(file);
 				List<Synchronization> syncRegionsOfThisFile = fileSync.getAllTheSyncRegionsOfTheFile();
 				if (syncRegionsOfThisFile == null) {
@@ -67,7 +62,8 @@ public class FolderSync {
 		}
 		return allTheSyncRegionsInTheFolder;
 
-	}	
+	}
+
 	public void checkSyncs(IModel model, List<Synchronization> allTheSyncsRegionOfTheFolder) {
 		// create a data structure
 		Map<String, Set<String>> map = new HashMap<String, Set<String>>();
@@ -75,31 +71,23 @@ public class FolderSync {
 
 		for (Synchronization sync : allTheSyncsRegionOfTheFolder) {
 
-				if (model.getElementById(sync.getId()) == null) {
-					System.err.println("Sorry! There's no respictive id in the model: " + sync.getId());
-					System.exit(0);
+			if (model.getElementById(sync.getId()) == null) {
+				System.err.println("Sorry! There's no respictive id in the model: " + sync.getId());
+				System.exit(0);
+			}
+			String valueOfAttributeInSyncRegion = (String) sync.getContent();
+			// new array without duplicated values
+			Set<String> valuesInSyncRegionWithoutDuplactie = new HashSet<>();
 
-				}
+			// Concatenation Id and attribute in model to have one key
+			String key = sync.getId() + "." + sync.getAttribute();
 
-				Object modelElement = model.getElementById(sync.getId());
+			valuesInSyncRegionWithoutDuplactie.add(valueOfAttributeInSyncRegion);
 
-				String valueOfAttributeInTheModel;
-
-				String valueOfAttributeInSyncRegion = (String) sync.getContent();
-				// new array without duplicated values
-				Set<String> valuesInSyncRegionWithoutDuplactie = new HashSet<>();
-
-				// Concatenation Id and attribute in model to have one key
-				String key = sync.getId() + "." + sync.getAttribute();
-
-				valuesInSyncRegionWithoutDuplactie.add(valueOfAttributeInSyncRegion);
-
-				if (map.containsKey(key))
-					map.get(key).add(valueOfAttributeInSyncRegion);
-				else
-					map.put(key, valuesInSyncRegionWithoutDuplactie);
-
-
+			if (map.containsKey(key))
+				map.get(key).add(valueOfAttributeInSyncRegion);
+			else
+				map.put(key, valuesInSyncRegionWithoutDuplactie);
 		}
 
 		for (Map.Entry<String, Set<String>> entry : map.entrySet()) {
@@ -107,194 +95,77 @@ public class FolderSync {
 			String[] id_attr = (String[]) key.split("\\.");
 			String id = id_attr[0];
 			String attribute = id_attr[1];
-			
-			
-			ArrayList<String> values = new ArrayList(entry.getValue());
-			
-			int type = 0;
-			
-			Object modelElement = model.getElementById(id);
 
+			ArrayList<String> values = new ArrayList<String>(entry.getValue());
+
+			int type = 0;
+
+			Object modelElement = model.getElementById(id);
 			Object valueOfAttributeInTheModel = null;
 			try {
-
-				if (propertyGetter.invoke(modelElement, attribute) instanceof String) {
-
-					valueOfAttributeInTheModel = propertyGetter.invoke(modelElement, attribute).toString();
-					type =0;
-				} else if (propertyGetter.invoke(modelElement, attribute) instanceof Integer) {
-					valueOfAttributeInTheModel = Integer.parseInt(propertyGetter.invoke(modelElement, attribute).toString());
-					type =1;	
-				} 
-				else if (propertyGetter.invoke(modelElement, attribute) instanceof Double) {
-					valueOfAttributeInTheModel = Double.parseDouble(propertyGetter.invoke(modelElement, attribute).toString());
+				Object property = propertyGetter.invoke(modelElement, attribute);
+				String str = propertyGetter.invoke(modelElement, attribute).toString();
+				if (property instanceof String) {
+					valueOfAttributeInTheModel = str;
+					type = 0;
+				} else if (property instanceof Integer) {
+					valueOfAttributeInTheModel = Integer.parseInt(str);
+					type = 1;
+				} else if (property instanceof Double) {
+					valueOfAttributeInTheModel = Double.parseDouble(str);
 					type = 2;
-				}
-				else if (propertyGetter.invoke(modelElement, attribute) instanceof Float) {
-
-					valueOfAttributeInTheModel = Float.parseFloat(propertyGetter.invoke(modelElement, attribute).toString());
+				} else if (property instanceof Float) {
+					valueOfAttributeInTheModel = Float.parseFloat(str);
 					type = 3;
-				}
-				else if (propertyGetter.invoke(modelElement, attribute) instanceof Boolean) {
-
-					valueOfAttributeInTheModel = Boolean.parseBoolean(propertyGetter.invoke(modelElement, attribute).toString());
+				} else if (property instanceof Boolean) {
+					valueOfAttributeInTheModel = Boolean.parseBoolean(str);
 					type = 4;
-				}
-				else if (propertyGetter.invoke(modelElement, attribute) instanceof Long) {
-
-					valueOfAttributeInTheModel = Long.parseLong(propertyGetter.invoke(modelElement, attribute).toString());
+				} else if (property instanceof Long) {
+					valueOfAttributeInTheModel = Long.parseLong(str);
 					type = 5;
-				}
-				else if (propertyGetter.invoke(modelElement, attribute) instanceof Short) {
-
-					valueOfAttributeInTheModel = Short.parseShort(propertyGetter.invoke(modelElement, attribute).toString());
+				} else if (property instanceof Short) {
+					valueOfAttributeInTheModel = Short.parseShort(str);
 					type = 6;
-				}
-				else if (propertyGetter.invoke(modelElement, attribute) instanceof Byte) {
-
-					valueOfAttributeInTheModel = Byte.parseByte(propertyGetter.invoke(modelElement, attribute).toString());
+				} else if (property instanceof Byte) {
+					valueOfAttributeInTheModel = Byte.parseByte(str);
 					type = 7;
-				}
-				else {
+				} else {
 					System.err.println("Other wrong type");
 				}
 
+				// First condition
 				if (values.size() == 1) {
+					// Case 1-a:
 					if ((valueOfAttributeInTheModel.toString()).equals(values.get(0))) {
-
 						System.out.println("size 1, same value in the model: " + valueOfAttributeInTheModel);
-
+					// Case 1-a:
 					} else {
 						System.out.println("size 1, but differnt value from the one that in the model: " + valueOfAttributeInTheModel);
 
-						Object modelElement1 = model.getElementById(id);
-						IPropertySetter propertySetter = model.getPropertySetter();
-						propertySetter.setObject(modelElement1);
-						propertySetter.setProperty(attribute);
-						try {
-							// Integer.parseInt
-							if (type == 0) {
-								propertySetter.invoke(values.get(0));		
-							} else
-							if (type == 1) {
-								propertySetter.invoke(Integer.parseInt(values.get(0)));	
-							} else
-							if (type == 2) {
-								propertySetter.invoke(Double.parseDouble(values.get(0)));
-								
-							} else
-							if (type == 3) {
-								propertySetter.invoke(Float.parseFloat(values.get(0)));
-							} else
-							if (type == 4) {
-								propertySetter.invoke(Boolean.parseBoolean(values.get(0)));
-							} else
-							if (type == 5) {
-								propertySetter.invoke(Long.parseLong(values.get(0)));
-							} else
-							if (type == 6) {
-								propertySetter.invoke(Short.parseShort(values.get(0)));
-							} else
-							if (type == 7) {
-								propertySetter.invoke(Byte.parseByte(values.get(0)));
-							}
-						
-						} catch (EolRuntimeException e) {
-							e.printStackTrace();
-						}
-						model.store();
+						DataTypes.getModelValue(model, id, attribute, type, values, 0);
+
 					}
-
+					// Second condition
 				} else if (values.size() == 2) {
-
+					// Case 2-a:
 					if ((valueOfAttributeInTheModel.toString()).equals(values.get(0)) && !(valueOfAttributeInTheModel.toString()).equals(values.get(1))) {
-						System.out.println("Size 2, there are two different values but one of them same the one that in the modelA: "
-										+ valueOfAttributeInTheModel);
-						Object modelElement1 = model.getElementById(id);
+						System.out.println("Size 2, two different values but one of them same the one that in the model: " + valueOfAttributeInTheModel);
 
-						IPropertySetter propertySetter = model.getPropertySetter();
-						propertySetter.setObject(modelElement1);
-						propertySetter.setProperty(attribute);
-						try {
-							if (type == 0) {
-								propertySetter.invoke(values.get(1));
-								
-							}
-							if (type == 1) {
-								propertySetter.invoke(Integer.parseInt(values.get(1)));	
-							}
-							if (type == 2) {
-								propertySetter.invoke(Double.parseDouble(values.get(1)));
-								
-							}
-							if (type == 3) {
-								propertySetter.invoke(Float.parseFloat(values.get(1)));
-							}
-							if (type == 4) {
-								propertySetter.invoke(Boolean.parseBoolean(values.get(1)));
-							}
-							if (type == 5) {
-								propertySetter.invoke(Long.parseLong(values.get(1)));
-							}
-							if (type == 6) {
-								propertySetter.invoke(Short.parseShort(values.get(1)));
-							}
-							if (type == 7) {
-								propertySetter.invoke(Byte.parseByte(values.get(1)));
-							}
-						} catch (EolRuntimeException e) {
-							e.printStackTrace();
-						}
-						model.store();
-						
+						DataTypes.getModelValue(model, id, attribute, type, values, 1);
 
+					// Case 2-b:
 					} else if ((valueOfAttributeInTheModel.toString()).equals(values.get(1)) && !(valueOfAttributeInTheModel.toString()).equals(values.get(0))) {
-						System.out.println("Size 2, there are two different values but one of them same the one that in the modelB : " + valueOfAttributeInTheModel);
-						Object modelElement1 = model.getElementById(id);
+						System.out.println("Size 2, two different values but one of them same the one that in the model : " + valueOfAttributeInTheModel);
 
-						IPropertySetter propertySetter = model.getPropertySetter();
-						propertySetter.setObject(modelElement1);
-						propertySetter.setProperty(attribute);
-						try {
-							if (type == 0) {
-								propertySetter.invoke(values.get(0));
-								
-							}
-							if (type == 1) {
-								propertySetter.invoke(Integer.parseInt(values.get(0)));	
-							}
-							if (type == 2) {
-								propertySetter.invoke(Double.parseDouble(values.get(0)));
-								
-							}
-							if (type == 3) {
-								propertySetter.invoke(Float.parseFloat(values.get(0)));
-							}
-							if (type == 4) {
-								propertySetter.invoke(Boolean.parseBoolean(values.get(0)));
-							}
-							if (type == 5) {
-								propertySetter.invoke(Long.parseLong(values.get(0)));
-							}
-							if (type == 6) {
-								propertySetter.invoke(Short.parseShort(values.get(0)));
-							}
-							if (type == 7) {
-								propertySetter.invoke(Byte.parseByte(values.get(0)));
-							}
-					
-						} catch (EolRuntimeException e) {
-							e.printStackTrace();
-						}
-						model.store();
-
+						DataTypes.getModelValue(model, id, attribute, type, values, 0);
+					// Case 3:
 					} else {
-						System.err.println("Size 2, there are two different values from the one in the model2.");
+						System.err.println("Size 2, two different values from the one in the model.");
 						System.exit(0);
 					}
 
 				} else {
-					System.err.println("Sorry! there are more than two different values.");
+					System.err.println("Sorry! two or more different values from the one in the model.");
 					System.exit(0);
 				}
 			} catch (EolRuntimeException e1) {
@@ -302,9 +173,8 @@ public class FolderSync {
 			}
 		}
 	}
-	
-	/////////////////////////////////////////old check model method
-	
+
+	// -------------------------------------- check model method
 	public String checkModelAgainstEachSyncRegion(IModel model, List<Synchronization> allTheSyncsRegionsOfTheFolder) {
 
 		Map<String, Set<String>> map = new HashMap<String, Set<String>>();
@@ -316,705 +186,55 @@ public class FolderSync {
 			String valueOfAttributeInTheModel;
 
 			// a.The respective element is found
-			//if ((model.getElementById(sync.id) != null) && (model.getElementById(sync.attribute) != null)) {
-			if ((model.getElementById(sync.id) != null) ) {
+			if ((model.getElementById(sync.id) != null)) {
 
 				System.out.println("The respective element is found");
-				// b. The value of the region is checked against the type of the respective property
+				// b. The value of the region is checked against the type of the respective
+				// property
 				try {
-					valueOfAttributeInTheModel = propertyGetter.invoke(model.getElementById(sync.id), sync.getAttribute()).toString();
+					valueOfAttributeInTheModel = propertyGetter
+							.invoke(model.getElementById(sync.id), sync.getAttribute()).toString();
 				} catch (EolRuntimeException e1) {
 					System.err.println("Sorry! There's no respictive attribute in the model: " + sync.getAttribute());
-					//System.exit(0);
 					return "The respective attribute is not found";
 				}
-/////----------------------------------------------------- for all types
-				if (dt.isCompatibale(sync.content, valueOfAttributeInTheModel)){
-					System.out.println("type is compatible");		
-				}
-				else {
+				// for all types
+				if (dt.isCompatibale(sync.content, valueOfAttributeInTheModel)) {
+					System.out.println("type is compatible");
+				} else {
 					System.err.println(" Sorry! The value's types are not compatible ");
-					//System.exit(0);
 					return "Incompatible type";
 				}
 			} else {
 				System.err.println("The respective element not found");
-				//System.exit(0);
 				return "The respictive element not found";
 			}
 		}
 		return "finish";
 	}
-	
-    public String updateTheModel(IModel model, List<Synchronization> allTheSyncsRegionOfTheFolder) {
+
+	public String updateTheModel(IModel model, List<Synchronization> allTheSyncsRegionOfTheFolder) {
 
 		String stepCheck = "finish";
 		stepCheck = checkModelAgainstEachSyncRegion(model, allTheSyncsRegionOfTheFolder);
-		if(!stepCheck.equals("finish")) 
+		if (!stepCheck.equals("finish"))
 			return stepCheck;
-		
+
 		checkSyncs(model, allTheSyncsRegionOfTheFolder);
 		System.out.println("All sync regions are without conflicts or errors. Thus, model has been updated.");
 		return stepCheck;
 	}
 
 	public String getSynchronization(String folder, IModel model) {
-		
+
 		List<Synchronization> allTheSyncRegionsInTheFolder = new ArrayList<Synchronization>();
 
 		allTheSyncRegionsInTheFolder = getAllTheSyncsRegionsOfTheFolder(folder);
-		
-		if(allTheSyncRegionsInTheFolder == null) 
+
+		if (allTheSyncRegionsInTheFolder == null)
 			return "Misformated or incompleted";
 		String result = updateTheModel(model, allTheSyncRegionsInTheFolder);
-	
 		return result;
 	}
-	
-	
-	
-	
-	
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-// 
-//	System.out.println((valueOfAttributeInTheModel.toString()).equals(values.get(0)));
-//	System.out.println(!valueOfAttributeInTheModel.equals(values.get(1)));
-//	
-//	System.out.println(valueOfAttributeInTheModel);
-//	System.out.println(values.get(0));
-//	System.out.println(values.get(1));
-	
-//
-//	public String checkSyncs(IModel model, List<Synchronization> allTheSyncsRegionOfTheFolder) {
-//		// create a data structure
-//		Map<String, Set<String>> map = new HashMap<String, Set<String>>();
-//		IPropertyGetter propertyGetter = model.getPropertyGetter();
-//
-//		for (Synchronization sync : allTheSyncsRegionOfTheFolder) {
-//
-//				String valueOfAttributeInSyncRegion = (String) sync.getContent();
-//				// new array without duplicated values
-//				Set<String> valuesInSyncRegionWithoutDuplactie = new HashSet<>();
-//
-//				// Concatenation Id and attribute in model to have one key
-//				String key = sync.getId() + "." + sync.getAttribute();
-//
-//				valuesInSyncRegionWithoutDuplactie.add(valueOfAttributeInSyncRegion);
-//
-//				if (map.containsKey(key))
-//					map.get(key).add(valueOfAttributeInSyncRegion);
-//				else
-//					map.put(key, valuesInSyncRegionWithoutDuplactie);
-//
-//
-//		}
-//
-//		for (Map.Entry<String, Set<String>> entry : map.entrySet()) {
-//			String key = entry.getKey();
-//			String[] id_attr = (String[]) key.split("\\.");
-//			String id = id_attr[0];
-//			String attribute = id_attr[1];
-//			
-//			
-//			ArrayList<String> values = new ArrayList(entry.getValue());
-//			    
-//			DataTypes dt = new DataTypes();
-//			
-//			Object modelElement = model.getElementById(id);
-//			
-//			Object valueOfAttributeInTheModel = null;
-//			valueOfAttributeInTheModel = dt.getType2(model, propertyGetter, id, attribute, valueOfAttributeInTheModel);
-//
-//				if (values.size() == 1) {
-//					if ((valueOfAttributeInTheModel.toString()).equals(values.get(0))) {
-//						System.out.println("size 1, same value in the model: " + valueOfAttributeInTheModel);
-//					} else {
-//						System.out.println("size 1, but differnt value from the one that in the model: " + valueOfAttributeInTheModel);
-//					
-//						IPropertySetter propertySetter = model.getPropertySetter();
-//						propertySetter.setObject(modelElement);
-//						propertySetter.setProperty(attribute);
-//						try {
-//							propertySetter.invoke(values.get(0));
-//						} catch (EolRuntimeException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						}
-//
-//					model.store();
-//				}
-//
-//			} else if (values.size() == 2) {
-//				System.out.println((valueOfAttributeInTheModel.toString()).equals(values.get(0)));
-//				System.out.println(!valueOfAttributeInTheModel.equals(values.get(1)));
-////				
-////				System.out.println(valueOfAttributeInTheModel);
-////				System.out.println(values.get(0));
-////				System.out.println(values.get(1));
-//
-//				if ((valueOfAttributeInTheModel.toString()).equals(values.get(0)) && !(valueOfAttributeInTheModel.toString()).equals(values.get(1))) {
-//					System.out.println("Size 2, there are two different values but one of them same the one that in the modelA: "
-//									+ valueOfAttributeInTheModel);
-//				
-//					IPropertySetter propertySetter = model.getPropertySetter();
-//					propertySetter.setObject(modelElement);
-//					propertySetter.setProperty(attribute);
-//					try {
-//						propertySetter.invoke(values.get(1));
-//					} catch (EolRuntimeException e) {
-//						e.printStackTrace();
-//					}
-//					model.store();					
-//
-//				} else if ((valueOfAttributeInTheModel.toString()).equals(values.get(1)) && !(valueOfAttributeInTheModel.toString()).equals(values.get(0))) {
-//					System.out.println("Size 2, there are two different values but one of them same the one that in the modelB : " + valueOfAttributeInTheModel);
-//
-//					IPropertySetter propertySetter = model.getPropertySetter();
-//					propertySetter.setObject(modelElement);
-//					propertySetter.setProperty(attribute);
-//					
-//					try {
-//						propertySetter.invoke(values.get(0));
-//					} catch (EolRuntimeException e) {
-//						e.printStackTrace();
-//					}
-//					model.store();
-//
-//				} else {
-//					System.err.println("Size 2, there are two different values from the one in the model2.");
-//					System.exit(0);
-//				}
-//
-//			} else {
-//				System.err.println("Sorry! there are more than two different values.");
-//				System.exit(0);
-//			}
-//		}
-//		return "finish";	
-//	}
-//
-//	public String checkModelAgainstEachSyncRegion(IModel model, List<Synchronization> allTheSyncsRegionsOfTheFolder) {
-//
-//		Map<String, Set<String>> map = new HashMap<String, Set<String>>();
-//		DataTypes dt = new DataTypes();
-//		IPropertyGetter propertyGetter = model.getPropertyGetter();
-//		Object valueOfAttributeInTheModel = null;
-//		for (Synchronization sync : allTheSyncsRegionsOfTheFolder) {
-//			// a.The respective element is found
-//			if ((model.getElementById(sync.id) != null) && (model.getElementById(sync.attribute) != null)) {
-//				// if ((model.getElementById(sync.id) != null) ) {
-//
-//				System.out.println("The respective element is found");
-//				// valueOfAttributeInTheModel =
-//				// propertyGetter.invoke(model.getElementById(sync.id),
-//				// sync.getAttribute()).toString();
-//				valueOfAttributeInTheModel = dt.getType2(model, propertyGetter, sync.id.toString(), sync.getAttribute().toString(), valueOfAttributeInTheModel);
-//
-//				Object val = dt.convert(valueOfAttributeInTheModel.getClass().toString(), sync.content);
-//				if (val == null) {
-//					System.err.println("\nIncompatible type..!!");
-//					System.exit(0);
-//				} else {
-//					System.out.println("type is compatible");
-//				}
-//			} else {
-////				System.err.println("The respective element not found: " + sync.id + " / " + sync.attribute);
-////				System.exit(0);
-//				// return "The respictive element not found";
-//			}
-//		}
-//		return "finish";
-//	}
-//	
-//    public String updateTheModel(IModel model, List<Synchronization> allTheSyncsRegionOfTheFolder) {
-//
-//		String stepCheck = "finish";
-//		checkModelAgainstEachSyncRegion(model, allTheSyncsRegionOfTheFolder);
-//		
-//		stepCheck = checkSyncs(model, allTheSyncsRegionOfTheFolder);		
-//		if(!stepCheck.equals("finish")) 
-//			return stepCheck;
-//		System.out.println("All sync regions are without conflicts or errors. Thus, model has been updated.");
-//
-//		return stepCheck;
-//	}
-//
-//	public String getSynchronization(String folder, IModel model) {
-//		
-//		List<Synchronization> allTheSyncRegionsInTheFolder = new ArrayList<Synchronization>();
-//
-//		allTheSyncRegionsInTheFolder = getAllTheSyncsRegionsOfTheFolder(folder);
-//		
-//		if(allTheSyncRegionsInTheFolder == null) 
-//			return "Misformated or incompleted";
-//		String result = updateTheModel(model, allTheSyncRegionsInTheFolder);
-//	
-//		return result;
-//	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/////----------------------------------------------------- for all types
-//if (dt.isCompatibale(sync.content, valueOfAttributeInTheModel)){
-//	System.out.println("type is compatible");		
-//}
-//else {
-//	System.err.println(" Sorry! The value's types are not compatible ");
-//	//System.exit(0);
-//	return "Incompatible type";
-//}
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-//	public void checkSyncs(IModel model, List<Synchronization> allTheSyncsRegionOfTheFolder) {
-//		// create a data structure
-//		Map<String, Set<String>> map = new HashMap<String, Set<String>>();
-//		IPropertyGetter propertyGetter = model.getPropertyGetter();
-//
-//		for (Synchronization sync : allTheSyncsRegionOfTheFolder) {
-//			
-//			Object modelElement = model.getElementById(sync.getId());
-//			
-////			String valueOfAttributeInTheModel;
-////			try {
-//////start
-////					if (model.getElementById(sync.getId()) == null) {
-////						System.err.println("Sorry! There's no respictive id in the model: " + sync.getId());
-////						System.exit(0);
-////				
-////					}
-////				
-////					Object modelElement = model.getElementById(sync.getId());
-////				
-////					String valueOfAttributeInTheModel;
-//// end
-////				if (propertyGetter.invoke(modelElement, sync.getAttribute()) instanceof String) {
-////					valueOfAttributeInTheModel = propertyGetter.invoke(modelElement, sync.getAttribute()).toString();
-////				} else if (propertyGetter.invoke(modelElement, sync.getAttribute()) instanceof Integer) {
-////					valueOfAttributeInTheModel = propertyGetter.invoke(modelElement, sync.getAttribute()).toString();
-////				} else {
-////					System.err.println("Other wrong type");
-////				}
-////			} catch (EolRuntimeException e) {
-////				// TODO Auto-generated catch block
-////				e.printStackTrace();
-////			}
-//			
-//				String valueOfAttributeInSyncRegion = (String) sync.getContent();
-//				// new array without duplicated values
-//				Set<String> valuesInSyncRegionWithoutDuplactie = new HashSet<>();
-//				// Concatenation Id and attribute in model to have one key
-//				String key = sync.getId() + "." + sync.getAttribute();
-//
-//				valuesInSyncRegionWithoutDuplactie.add(valueOfAttributeInSyncRegion);
-/////start
-//					if (map.containsKey(key))
-//						map.get(key).add(valueOfAttributeInSyncRegion);
-//					else
-//						map.put(key, valuesInSyncRegionWithoutDuplactie);
-//				
-//				} catch (EolRuntimeException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				} catch (NullPointerException e1) {
-//					System.err.println("Sorry, such model doesn't exist");
-//				}
-///////end
-//		} 
-//
-//		for (Map.Entry<String, Set<String>> entry : map.entrySet()) {
-//			String key = entry.getKey();
-//			String[] id_attr = (String[]) key.split("\\.");
-//			String id = id_attr[0];
-//			String attribute = id_attr[1];
-//			
-//			/*ArrayList<Object> values = new ArrayList<>();
-//			TypeParser tp = new TypeParser();
-//			for(String s : entry.getValue()) {
-//				if(s!=null || s.equals("")) {
-//					Object o = tp.getType(s);
-//					values.add(o);
-//				}
-//			}*/
-//			//values.addAll(entry.getValue());
-//			ArrayList<String> values = new ArrayList(entry.getValue());
-//
-//			Object modelElement = model.getElementById(id);
-//
-//			Object valueOfAttributeInTheModel = " ";
-//			try {
-/////start
-////				if (propertyGetter.invoke(modelElement, attribute) instanceof String) {
-////			
-////					valueOfAttributeInTheModel = propertyGetter.invoke(modelElement, attribute).toString();
-////				} else if (propertyGetter.invoke(modelElement, attribute) instanceof Integer) {
-////			
-////					valueOfAttributeInTheModel = Integer
-////							.parseInt(propertyGetter.invoke(modelElement, attribute).toString());
-////				} else {
-////					System.err.println("Other wrong type");
-////				}
-//////end	the next line he use it
-//				valueOfAttributeInTheModel = propertyGetter.invoke(modelElement, attribute).toString();
-//
-////------------------------------------------------------------------ case value = 1
-//				if (values.size() == 1) {
-//					if (valueOfAttributeInTheModel.equals(((List<String>) values).get(0))) {
-//					//if (valueOfAttributeInTheModel.equals(values.get(0))) {
-//
-//						System.out.println("size 1, same value in the model: " + valueOfAttributeInTheModel.toString());
-//
-//					} else {
-//						System.out.println("size 1, but differnt value from the one that in the model: " + valueOfAttributeInTheModel.toString());
-//
-//						Object modelElement1 = model.getElementById(id);
-//						IPropertySetter propertySetter = model.getPropertySetter();
-//						propertySetter.setObject(modelElement1);
-//						propertySetter.setProperty(attribute);
-////						try {
-////							propertySetter.invoke(values.get(0));
-////						} catch (EolRuntimeException e) {
-////							e.printStackTrace();
-////						}
-//							// in old method
-//							try {
-//								// Integer.parseInt
-//								propertySetter.invoke(Integer.parseInt(values.get(0)));
-//							} catch (EolRuntimeException e) {
-//								e.printStackTrace();
-//							}
-//						model.store();
-//					}
-////------------------------------------------------------------------ case value = 2					
-//				} else if (values.size() == 2) {  
-//
-//					if (valueOfAttributeInTheModel.equals(values.get(0)) && !valueOfAttributeInTheModel.equals(values.get(1))) {
-//						System.out.println("Size 2, there are two different values but one of them same the one that in the model. ");
-//						
-//						Object modelElement1 = model.getElementById(id);
-//
-//						IPropertySetter propertySetter = model.getPropertySetter();
-//						propertySetter.setObject(modelElement1);
-//						propertySetter.setProperty(attribute);
-//						try {
-//							propertySetter.invoke(values.get(1));
-//						} catch (EolRuntimeException e) {
-//							e.printStackTrace();
-//						}
-//						model.store();
-//
-//					} else if (valueOfAttributeInTheModel.equals(values.get(1)) && !valueOfAttributeInTheModel.equals(values.get(0))) {
-//						System.out.println("Size 2, there are two different values but one of them same the one that in the model. ");
-//						Object modelElement1 = model.getElementById(id);
-//
-//						IPropertySetter propertySetter = model.getPropertySetter();
-//						propertySetter.setObject(modelElement1); 
-//						propertySetter.setProperty(attribute);
-//						try {
-//							propertySetter.invoke(values.get(0));
-//						} catch (EolRuntimeException e) {
-//							e.printStackTrace();
-//						}
-//						model.store();
-//						
-//
-//					} else {
-//						System.err.println("Size 2, there are two different values from the one in the model.. ");
-//						System.exit(0);
-//
-//					}
-//				// case 3 value 2 or more different
-//				} else {
-//					System.err.println("Sorry! there are more than two different values....");
-//					System.exit(0);
-//				}
-//			} catch (EolRuntimeException e1) {
-//				e1.printStackTrace();
-//			}
-//		}
-//	}
-	
-	//-----------------------------------------------------------------------------------------------------------
-
-	//------------------------------------------------------------------------------------------------------------
-	
-//	public void checkModelAgainstEachSyncRegion(IModel model, List<Synchronization> allTheSyncsRegionsOfTheFolder) {
-//		Map<String, Set<String>> map = new HashMap<String, Set<String>>();
-//
-//		IPropertyGetter propertyGetter = model.getPropertyGetter();
-//		
-//		DataTypes dt = new DataTypes();
-//		
-//		for (Synchronization sync : allTheSyncsRegionsOfTheFolder) {
-//
-//			String valueOfAttributeInTheModel;
-//
-//			// a.The respective element is found
-//			if ((model.getElementById(sync.id) != null) ) {
-//				System.out.println("The respective element is found");
-//				// b. The value of the region is checked against the type of the respective property
-//				
-//				try {
-//					valueOfAttributeInTheModel = propertyGetter.invoke(model.getElementById(sync.id), sync.getAttribute()).toString();
-//				} catch (EolRuntimeException e1) {
-//					System.err.println("Sorry! There's no respictive attribute in the model: " + sync.getAttribute());
-//					System.exit(0);
-//					break;
-//				}
-//				if (dt.isCompatibale(sync.content, valueOfAttributeInTheModel)){
-//					
-//					System.out.println("type is compatible");
-//						
-//				}
-////				boolean isModelInt = true;
-////				boolean isSyncInt = true;
-////
-////				try {
-////					Integer.parseInt(valueOfAttributeInTheModel);
-////				} catch (NumberFormatException e) {
-////					isModelInt = false;
-////				}
-////
-////				try {
-////					Integer.parseInt(sync.content);
-////				} catch (NumberFormatException e) {
-////					isSyncInt = false;
-////				}
-////
-////				if ((isModelInt && isSyncInt) || (!isModelInt && !isSyncInt)) {
-////				
-////				System.out.println("type is compatible");
-////				}
-//				else {
-//					System.err.println("Sorry! The value's types are not compatible ");
-//					System.exit(0);
-//				}
-//			} else {
-//					System.err.println("Sorry! There's no respictive id in the model: " + sync.getId());
-//					System.exit(0);
-//			}
-//		}
-//	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-////------------------------------------------------------ 1- only for Integer 
-//boolean isValueInModelInt = true;
-//boolean isValueInSyncInt = true;
-//
-//try {
-//	Integer.parseInt(valueOfAttributeInTheModel);
-//} catch (NumberFormatException e) {
-//	isValueInModelInt = false;
-//}
-//
-//try {
-//	Integer.parseInt(sync.content);
-//} catch (NumberFormatException e) {
-//	isValueInSyncInt = false;
-//}
-//
-//if ((isValueInModelInt && isValueInSyncInt) || (!isValueInModelInt && !isValueInSyncInt)) {
-//	System.out.println("type is compatible");
-//} 
-////-------------------------------------------------------- 2- only for Float
-//boolean isValueInModelFloat = true;
-//boolean isValueInSyncFloat = true;
-//
-//try {
-//	Integer.parseInt(valueOfAttributeInTheModel);
-//} catch (NumberFormatException e) {
-//	isValueInModelFloat = false;
-//}
-//
-//try {
-//	Integer.parseInt(sync.content);
-//} catch (NumberFormatException e) {
-//	isValueInSyncFloat = false;
-//}
-//
-//if ((isValueInModelFloat && isValueInSyncFloat) || (!isValueInModelFloat && !isValueInSyncFloat)) {
-//	System.out.println("type is compatible");
-//}
-//
