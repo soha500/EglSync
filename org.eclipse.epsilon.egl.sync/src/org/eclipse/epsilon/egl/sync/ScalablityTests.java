@@ -120,18 +120,39 @@ public class ScalablityTests {
     }
 
     // with one different value
-    String filePathFor100Files = "DataFor100FilesWith1DifferentValue.csv";
-    String filePathFor200Files = "DataFor200FilesWith1DifferentValue.csv";
-    String filePathFor300Files = "DataFor300FilesWith1DifferentValue.csv";
-    String filePathFor400Files = "DataFor400FilesWith1DifferentValue.csv";
-    String filePathFor500Files = "DataFor500FilesWith1DifferentValue.csv";
-    String filePathFor600Files = "DataFor600FilesWith1DifferentValue.csv";
-    String filePathFor700Files = "DataFor700FilesWith1DifferentValue.csv";
-    String filePathFor800Files = "DataFor800FilesWith1DifferentValue.csv";
-    String filePathFor900Files = "DataFor900FilesWith1DifferentValue.csv";
-    String filePathFor1000Files = "DataFor1000FilesWith1DifferentValue.csv";
+//    String filePathFor100Files = "DataFor100FilesWith1DifferentValue.csv";
+//    String filePathFor200Files = "DataFor200FilesWith1DifferentValue.csv";
+//    String filePathFor300Files = "DataFor300FilesWith1DifferentValue.csv";
+//    String filePathFor400Files = "DataFor400FilesWith1DifferentValue.csv";
+//    String filePathFor500Files = "DataFor500FilesWith1DifferentValue.csv";
+//    String filePathFor600Files = "DataFor600FilesWith1DifferentValue.csv";
+//    String filePathFor700Files = "DataFor700FilesWith1DifferentValue.csv";
+//    String filePathFor800Files = "DataFor800FilesWith1DifferentValue.csv";
+//    String filePathFor900Files = "DataFor900FilesWith1DifferentValue.csv";
+//    String filePathFor1000Files = "DataFor1000FilesWith1DifferentValue.csv";
     
-	public static void writeResultsToCSvFile(int stageNumber, long takenTime, String filePath) {
+//    String filePathFor2000Files = "DataFor2000FilesWithTheSameValue.csv";
+//    String filePathFor4000Files = "DataFor4000FilesWithTheSameValue.csv";
+//    String filePathFor6000Files = "DataFor6000FilesWithTheSameValue.csv";
+//    String filePathFor8000Files = "DataFor8000FilesWithTheSameValue.csv";
+//    String filePathFor10000Files = "DataFor10000FilesWithTheSameValue.csv";
+//    String filePathFor12000Files = "DataFor12000FilesWithTheSameValue.csv";
+    
+//    String filePathFor2000Files = "DataFor2000FilesWith1DifferentValue.csv";
+//    String filePathFor4000Files = "DataFor4000FilesWith1DifferentValue.csv";
+//    String filePathFor6000Files = "DataFor6000FilesWith1DifferentValue.csv";
+//    String filePathFor8000Files = "DataFor8000FilesWith1DifferentValue.csv";
+//    String filePathFor10000Files = "DataFor10000FilesWith1DifferentValue.csv";
+//    String filePathFor900Files = "DataFor900FilesWith1DifferentValue.csv";
+    
+    String filePathFor2000Files = "DataFor2000FilesWithHalfDifferentValue.csv";
+    String filePathFor4000Files = "DataFor4000FilesWithHalfDifferentValue.csv";
+    String filePathFor6000Files = "DataFor6000FilesWithHalfDifferentValue.csv";
+    String filePathFor8000Files = "DataFor8000FilesWithHalfDifferentValue.csv";
+    String filePathFor10000Files = "DataFor10000FilesWithHalfDifferentValue.csv";
+    String filePathFor900Files = "DataFor900FilesWithHalfDifferentValue.csv";
+
+	public static void writeResultsToCSvFile(int stageNumber, long takenTime, long bytesUsed, String filePath) {
 		try {
 			boolean header = !new File(filePath).exists();
 			FileWriter fw = new FileWriter(filePath, true);
@@ -139,14 +160,13 @@ public class ScalablityTests {
 			PrintWriter pw = new PrintWriter(bw);
 			if (header)
 //				pw.println("Stage number, (Totel) Taken time for each run," + Clock.systemDefaultZone().instant());
-				pw.println("Stage number, (Totel) Taken time, Outlier, Q1 , Q3, IQR, Upper Value, Lower Value");
-			pw.println(String.format("%d,%d", stageNumber, takenTime));
+				pw.println("Stage number, (Totel) Taken time, Bytes used, Outlier, Q1 , Q3, IQR, Upper Value, Lower Value");
+			pw.println(String.format("%d,%d,%d", stageNumber, takenTime, bytesUsed));
 			pw.flush();
 			fw.close();
-			// JOptionPane.showMessageDialog(null, "recored saved");
 
 		} catch (Exception E) {
-			// JOptionPane.showMessageDialog(null, "recored not saved");
+			System.out.println("There is errors!!");
 		}
 	}
 
@@ -154,8 +174,12 @@ public class ScalablityTests {
 		new File(filePath).delete();
 		for (int i = 0; i < numberOfTimes; i++) {
 			long start = System.currentTimeMillis();
+			Runtime runtime = Runtime.getRuntime();
+			runtime.gc();
 			theTest.get();
-			writeResultsToCSvFile(i, System.currentTimeMillis() - start, filePath);
+//			writeResultsToCSvFile(i, System.currentTimeMillis() - start, filePath);
+            long memory = runtime.totalMemory() - runtime.freeMemory();
+			writeResultsToCSvFile(i, System.currentTimeMillis() - start, memory,  filePath);
 		}
 	}
 	
@@ -190,8 +214,8 @@ public class ScalablityTests {
 	
 	public boolean oneDifferentValue (int numberOfFiles)  {
 		Map<String, String> behaviours = new HashMap<>();
-		behaviours.put("BoilerActuator", "LastTest- return temperature - targetTemperature;");
-		behaviours.put("TemperatureController", "LastTestif(temperatureDifference > 0 && boilerStatus == true) { return 1; } else if (temperatureDifference < 0 && boilerStatus == false) { return 2; } else return 0;");
+		behaviours.put("BoilerActuator", "Half Change - return temperature - targetTemperature;");
+		behaviours.put("TemperatureController", "1-if(temperatureDifference > 0 && boilerStatus == true) { return 1; } else if (temperatureDifference < 0 && boilerStatus == false) { return 2; } else return 0;");
 		testValues(behaviours, numberOfFiles);
 		return true;
 	}
@@ -214,37 +238,46 @@ public class ScalablityTests {
 //public void test10Files2() throws IOException {
 //	doTestNTimes(100, filePathFor10Files, () -> twoDifferentValues(10));
 //}
+//	System.out.println("Working Directory = " + System.getProperty("user.dir"));
 
-//	// createModule()
-//	public IEolModule createModule() {
-//		/*
-//		 * This works but i should change it to be generalise with absolute bath this
-//		 * still not able to generate files without it 20/02/20
-//		 */
-//		try {
-//			EglFileGeneratingTemplateFactory templateFactory = new EglFileGeneratingTemplateFactory();
-////			templateFactory.setOutputRoot(System.getProperty("user.dir") + "/SyncTests/GeneratedFilesFromUniversity/");
-////			templateFactory.setOutputRoot("/Users/sultanalmutairi/git/EglSync/org.eclipse.epsilon.egl.sync/boiler-To-Generate-100-Files/");
-//			templateFactory.setOutputRoot("/Users/sultanalmutairi/Documents/Workspaces/runtime-EclipseApplication/org.eclipse.epsilon.examples.egl.comps/boiler-To-Generate-100-Files/boiler-To-Generate-100-Files/syncregions-100Files/");
-//			
-//			System.out.println("Working Directory = " + System.getProperty("user.dir"));
-//
-//			return new EgxModule(templateFactory);
-//		} catch (Exception ex) {
-//			throw new RuntimeException(ex);
-//		}
-//	}
-//
+	// createModule()
+	public IEolModule createModule() {
+		try {
+			EglFileGeneratingTemplateFactory templateFactory = new EglFileGeneratingTemplateFactory();
+//			templateFactory.setOutputRoot(System.getProperty("user.dir") + "/SyncTests/GeneratedFilesFromUniversity/");
+			// other workspace
+			templateFactory.setOutputRoot("/Users/sultanalmutairi/Documents/Workspaces/runtime-EclipseApplication/org.eclipse.epsilon.examples.egl.comps/boiler-To-Generate-100-Files/boiler-To-Generate-100-Files/syncregions-100Files/");
+			
+			return new EgxModule(templateFactory);
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+
 //	@Test
 //	public void runTheGenerator() {
+//		
+//		File originalFile = new File(System.getProperty("user.dir") + String.format("/boiler-To-Generate-%1$d-Files/BoilerController-%1$d-Components.model", 100));
+//		model = new EmfModel();
+//		model.setName("M");
+//		model.setMetamodelFile(new File(System.getProperty("user.dir") + "/boiler-Ecore/comps.ecore").getAbsolutePath());
+//		model.setModelFile(originalFile.getAbsolutePath());
+//		model.setReadOnLoad(true);
+//		try {
+//			model.load();
+//		} catch (EolModelLoadingException e2) {
+//			e2.printStackTrace();
+//		}
+//		
+//		
+//		
+//		
 //		IEolModule module = createModule(); // The createModule() method follows
 //		module.getContext().getModelRepository().addModel(model); // The model parameter is the EmfModel you already
-//		// create so you need to include that code as well.
 //		try {
-//			// this works and automatically generates the files without need to all URL 20/02/20
-////			module.parse(new File(System.getProperty("user.dir") + "/boiler-To-Generate-100-Files/sync-regions100.egx"));
-////			module.parse(new File ("boiler-To-Generate-100-Files/sync-regions100.egx"));
-//			module.parse(new File ("user.dir") + String.format("boiler-To-Generate-100-Files/sync-regions100.egx"));
+//			module.parse(new File ("user.dir") + String.format("/boiler-To-Generate-100-Files/sync-regions100.egx"));
+//			// other workspace
+//			module.parse(new File ("/Users/sultanalmutairi/git/Epsilon-Source/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/boiler-To-Generate-100-Files/sync-regions100.egx"));
 //		} catch (Exception e) {
 //			e.printStackTrace();
 //		}
@@ -254,96 +287,183 @@ public class ScalablityTests {
 //			e.printStackTrace();
 //		}
 //	}
+
 	
 	/*
-	 * Scenario 1, if we have a 100 files
+	 * Scenario 1, if we have a 200 files
 	 */
 	
 	@Test
-	public void test100Files() throws IOException {
-		doTestNTimes(50, filePathFor100Files, () -> oneDifferentValue(100));
+	public void test2000Files() throws IOException {
+		doTestNTimes(100, filePathFor2000Files, () -> oneDifferentValue(200));
 	}
 	
 	/*
-	 * Scenario 2, if we have a 200 files
+	 * Scenario 2, if we have a 400 files
 	 */
 	
 	@Test
-	public void test200Files() throws IOException {
-		doTestNTimes(50, filePathFor200Files, () -> oneDifferentValue(200));
+	public void test4000Files() throws IOException {
+		doTestNTimes(100, filePathFor4000Files, () -> oneDifferentValue(400));
 	}
 	
 	/*
-	 * Scenario 3, if we have a 300 files
+	 * Scenario 3, if we have a 600 files
 	 */
 	
 	@Test
-	public void test300Files() throws IOException {
-		doTestNTimes(50, filePathFor300Files, () -> oneDifferentValue(300));
-	}
-	
-	/*
-	 * Scenario 4, if we have a 400 files
-	 */
-	
-	@Test
-	public void test400Files() throws IOException {
-		doTestNTimes(50, filePathFor400Files, () -> oneDifferentValue(400));
-	}
-	
-	/*
-	 * Scenario 5, if we have a 500 files
-	 */
-	
-	@Test
-	public void test500Files() throws IOException {
-		doTestNTimes(50, filePathFor500Files, () -> oneDifferentValue(500));
-	}
-	
-	/*
-	 * Scenario 6, if we have a 600 files
-	 */
-	
-	@Test
-	public void test600Files() throws IOException {
-		doTestNTimes(50, filePathFor600Files, () -> oneDifferentValue(600));
-	}
-	
-	/*
-	 * Scenario 7, if we have a 700 files
-	 */
-	
-	@Test
-	public void test700Files() throws IOException {
-		doTestNTimes(50, filePathFor700Files, () -> oneDifferentValue(700));
-	}
-	
-	/*
-	 * Scenario 8, if we have a 800 files
-	 */
-	
-	@Test
-	public void test800Files() throws IOException {
-		doTestNTimes(50, filePathFor800Files, () -> oneDifferentValue(800));
+	public void test6000Files() throws IOException {
+		doTestNTimes(100, filePathFor6000Files, () -> oneDifferentValue(600));
 	}
 
 	/*
-	 * Scenario 9, if we have a 900 files
+	 * Scenario 4, if we have a 800 files
 	 */
 	
 	@Test
-	public void test900Files() throws IOException {
-		doTestNTimes(50, filePathFor900Files, () -> oneDifferentValue(900));
+	public void test8000Files() throws IOException {
+		doTestNTimes(100, filePathFor8000Files, () -> oneDifferentValue(800));
 	}
 
 	/*
-	 * Scenario 10, if we have a 1000 files
+	 * Scenario 5, if we have a 1000 files
 	 */
 	
 	@Test
-	public void test1000Files() throws IOException {
-		doTestNTimes(50, filePathFor1000Files, () -> oneDifferentValue(1000));
+	public void test10000Files() throws IOException {
+		doTestNTimes(100, filePathFor10000Files, () -> oneDifferentValue(1000));
 	}
+
+	/*
+	 * Scenario 6, if we have a 1000 files
+	 */
+//	
+//	@Test
+//	public void test900Files() throws IOException {
+//		doTestNTimes(100, filePathFor900Files, () -> oneDifferentValue(900));
+//	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
+	 * 
+	 * the below tests are for 50 times ran
+	 * 
+	 */
+	
+	
+	
+	
+//	/*
+//	 * Scenario 1, if we have a 100 files
+//	 */
+//	
+//	@Test
+//	public void test100Files() throws IOException {
+//		doTestNTimes(50, filePathFor100Files, () -> oneDifferentValue(100));
+//	}
+//	
+//	/*
+//	 * Scenario 2, if we have a 200 files
+//	 */
+//	
+//	@Test
+//	public void test200Files() throws IOException {
+//		doTestNTimes(50, filePathFor200Files, () -> oneDifferentValue(200));
+//	}
+//	
+//	/*
+//	 * Scenario 3, if we have a 300 files
+//	 */
+//	
+//	@Test
+//	public void test300Files() throws IOException {
+//		doTestNTimes(50, filePathFor300Files, () -> oneDifferentValue(300));
+//	}
+//	
+//	/*
+//	 * Scenario 4, if we have a 400 files
+//	 */
+//	
+//	@Test
+//	public void test400Files() throws IOException {
+//		doTestNTimes(50, filePathFor400Files, () -> oneDifferentValue(400));
+//	}
+//	
+//	/*
+//	 * Scenario 5, if we have a 500 files
+//	 */
+//	
+//	@Test
+//	public void test500Files() throws IOException {
+//		doTestNTimes(50, filePathFor500Files, () -> oneDifferentValue(500));
+//	}
+//	
+//	/*
+//	 * Scenario 6, if we have a 600 files
+//	 */
+//	
+//	@Test
+//	public void test600Files() throws IOException {
+//		doTestNTimes(50, filePathFor600Files, () -> oneDifferentValue(600));
+//	}
+//	
+//	/*
+//	 * Scenario 7, if we have a 700 files
+//	 */
+//	
+//	@Test
+//	public void test700Files() throws IOException {
+//		doTestNTimes(50, filePathFor700Files, () -> oneDifferentValue(700));
+//	}
+//	
+//	/*
+//	 * Scenario 8, if we have a 800 files
+//	 */
+//	
+//	@Test
+//	public void test800Files() throws IOException {
+//		doTestNTimes(50, filePathFor800Files, () -> oneDifferentValue(800));
+//	}
+//
+//	/*
+//	 * Scenario 9, if we have a 900 files
+//	 */
+//	
+//	@Test
+//	public void test900Files() throws IOException {
+//		doTestNTimes(50, filePathFor900Files, () -> oneDifferentValue(900));
+//	}
+//
+//	/*
+//	 * Scenario 10, if we have a 1000 files
+//	 */
+//	
+//	@Test
+//	public void test1000Files() throws IOException {
+//		doTestNTimes(50, filePathFor1000Files, () -> oneDifferentValue(1000));
+//	}
 		
 }
 

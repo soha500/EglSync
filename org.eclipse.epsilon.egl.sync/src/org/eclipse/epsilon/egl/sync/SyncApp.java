@@ -18,14 +18,14 @@ public class SyncApp {
 		/*
 		 * this works and automatically generates the files without need to all url and with updating
 		 */
-
+	
 		// University-Last-Project 
-//		model.setMetamodelFile(new File("SyncTests/Model-University/University.ecore").getAbsolutePath());
-//		model.setModelFile(new File("SyncTests/Model-University/University.model").getAbsolutePath());	
+		model.setMetamodelFile(new File("SyncTests/Model-University/University.ecore").getAbsolutePath());
+		model.setModelFile(new File("SyncTests/Model-University/University.model").getAbsolutePath());	
 
 		// for the boiler test in other workspace
-		model.setMetamodelFile(new File("/Users/sultanalmutairi/git/Epsilon-Source/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/comps.ecore").getAbsolutePath());
-		model.setModelFile(new File("/Users/sultanalmutairi/git/Epsilon-Source/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/BoilerController.model").getAbsolutePath());
+//		model.setMetamodelFile(new File("/Users/sultanalmutairi/git/Epsilon-Source/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/comps.ecore").getAbsolutePath());
+//		model.setModelFile(new File("/Users/sultanalmutairi/git/Epsilon-Source/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/BoilerController.model").getAbsolutePath());
 
 		model.setReadOnLoad(true);
 		model.setStoredOnDisposal(true);

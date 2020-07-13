@@ -74,8 +74,7 @@ public class FileSync {
 					Synchronization sync = new Synchronization(idAndAttribute1[0].trim(), idAndAttribute1[1].trim());
 
 					try {
-						while ((line = this.bRead.readLine()) != null && !line.contains("//endSync")
-								&& !line.contains("//sync"))
+						while ((line = this.bRead.readLine()) != null && !line.contains("//endSync") && !line.contains("//sync"))
 							sync.addContent(line.trim());
 
 						if (line == null) {
@@ -91,10 +90,11 @@ public class FileSync {
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
-
 					allTheSyncRegionsInTheFile.add(sync);
 				}
 
+				// Until here
+				
 			} else if (line.contains("/*sync")) {
 				// /*sync with extend 4 groups
 				if (line.contains("extends")) {
