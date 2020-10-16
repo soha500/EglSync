@@ -19,9 +19,14 @@ public class SyncApp {
 		 * this works and automatically generates the files without need to all url and with updating
 		 */
 	
-		// University-Last-Project 
-		model.setMetamodelFile(new File("SyncTests/Model-University/University.ecore").getAbsolutePath());
-		model.setModelFile(new File("SyncTests/Model-University/University.model").getAbsolutePath());	
+		// for the university-last project - just to test
+		model.setMetamodelFile(new File("University-Last-Project/University.ecore").getAbsolutePath());
+		model.setModelFile(new File("University-Last-Project/University.model").getAbsolutePath());	
+		
+		
+//		// University-Last-Project 
+//		model.setMetamodelFile(new File("SyncTests/Model-University/University.ecore").getAbsolutePath());
+//		model.setModelFile(new File("SyncTests/Model-University/University.model").getAbsolutePath());	
 
 		// for the boiler test in other workspace
 //		model.setMetamodelFile(new File("/Users/sultanalmutairi/git/Epsilon-Source/org.eclipse.epsilon/examples/org.eclipse.epsilon.examples.egl.comps/comps.ecore").getAbsolutePath());

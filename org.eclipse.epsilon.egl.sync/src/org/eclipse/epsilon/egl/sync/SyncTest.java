@@ -394,7 +394,7 @@ public class SyncTest {
 			e.printStackTrace();
 		}
 
-		assertEquals("test 5", "hi", valueOfAttributeInTheModel);
+		assertEquals("test 5", "hello", valueOfAttributeInTheModel);
 	}
 	
 	/*
@@ -623,7 +623,7 @@ public class SyncTest {
 			e.printStackTrace();
 		}
 
-		assertEquals("test 9", "hi", valueOfAttributeInTheModel);
+		assertEquals("test 9", "hello", valueOfAttributeInTheModel);
 
 	}
 	

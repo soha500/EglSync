@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -21,14 +22,18 @@ import org.eclipse.epsilon.eol.execute.introspection.IPropertyGetter;
 import org.eclipse.epsilon.eol.execute.introspection.IPropertySetter;
 import org.eclipse.epsilon.eol.models.IModel;
 
+import org.eclipse.epsilon.egl.output.OutputBuffer;
+import org.eclipse.epsilon.egl.sync.diff_match_patch;
+import org.eclipse.epsilon.egl.sync.diff_match_patch.Diff;
+import org.eclipse.epsilon.egl.sync.diff_match_patch.Operation;
+
 import com.sun.glass.ui.CommonDialogs.Type;
 
 public class FolderSync {
-
-	public List<Synchronization> getAllTheSyncsRegionsOfTheFolder(String folder) {
+	
+	public Map<String, String> getFolderFileNamesAndContents(String folder) {
 		Path folderPath = Paths.get(folder);
 		List<String> fileNames = new ArrayList<>();
-		
 		try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(folderPath)) {
 			for (Path path : directoryStream) {
 				fileNames.add(path.toString());
@@ -37,23 +42,150 @@ public class FolderSync {
 			System.err.println("Error reading files");
 		}
 
-		// create data structure for all files's names and contents in the folder
-		Map<String, List<String>> namesAndContents = new TreeMap<String, List<String>>();
-		List<Synchronization> allTheSyncRegionsInTheFolder = new ArrayList<Synchronization>();
+		Map<String, String> namesAndContents = new TreeMap<String, String>();
 
 		for (String file : fileNames) {
 			try {
-				List<String> content = Files.readAllLines(Paths.get(file));
+				String content = new String(Files.readAllBytes(Paths.get(file)));
 				namesAndContents.put(file, content);
-				FileSync fileSync = new FileSync(file);
-				List<Synchronization> syncRegionsOfThisFile = fileSync.getAllTheSyncRegionsOfTheFile();
-				if (syncRegionsOfThisFile == null) {
-					return null;
-				}
-				allTheSyncRegionsInTheFolder.addAll(syncRegionsOfThisFile);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+		return namesAndContents;
+	}
+
+	public boolean checkFolderForChanges2(String folder) {
+		Map<String, String> namesAndContents = getFolderFileNamesAndContents(folder);
+		boolean hasChanges = false;
+		for (String fileName : namesAndContents.keySet()) //
+			hasChanges |= areChangesOutsideRegions2(namesAndContents.get(fileName));
+		return hasChanges;
+	}
+
+	// To check if any change happened outside the regions..
+	public boolean areChangesOutsideRegions2(String fileContent) {
+		String hashLine;
+		List<String> lines;
+		// looking for the last two lines and remove them
+		{
+			String[] linesArr = fileContent.split("\n");
+			hashLine = linesArr[linesArr.length - 1].substring(2);
+			lines = new ArrayList<String>(Arrays.asList(linesArr));
+			lines.remove(lines.size() - 1); // hashes
+			lines.remove(lines.size() - 1); // comment
+		}
+
+		String recreatedContent = String.join("\n", lines); // take all lines without the last two lines
+		String contentWithoutAnyRegions = OutputBuffer.contentWithoutRegions(recreatedContent);
+		String[] linesWithoutRegions = contentWithoutAnyRegions.split("\n");
+		String oldHashDoc = makeHashDoc(hashLine);
+		String newHashDoc = makeHashDoc(OutputBuffer.makeHashLine(recreatedContent));
+		List<Diff> diffs = lineDiffs(oldHashDoc, newHashDoc);
+		for (Diff d : diffs)
+			d.text = d.text.replace("\n", ""); // remove new line
+		boolean hasChanged = false;
+		// To track the line number..
+		int l = 0; // Line index for lines without regions
+		int o = 0; // Offset 
+		boolean isChange = false; // keep track if there is change rather deletion or insertion
+		for (int d = 0; d < diffs.size(); ++d) {
+			Diff diff = diffs.get(d);
+			int dLines = diff.text.length() / 3;
+			if (dLines == 0)
+				continue;
+
+			if (diff.operation == Operation.DELETE)
+				if (d + 1 < diffs.size() && diffs.get(d + 1).operation == Operation.INSERT) {
+					int delOffset = calculateRegionLength(lines, dLines, o + l);
+					int insOffset = calculateRegionLength(lines, 1, o + l);
+					isChange = l + o + delOffset == l + o + insOffset;
+					if (isChange) {
+						o += delOffset;
+						continue;
+					}
+				}
+
+			switch (diff.operation) {
+			case DELETE:
+				o += calculateRegionLength(lines, dLines, o + l);
+				System.out.println(dLines + " DELETION" + (dLines > 1 ? "S starting" : "") + " on line " + (l + o + 1) + "."); 
+				hasChanged = true;
+				break;
+			case EQUAL:
+				o += calculateRegionLength(lines, dLines, o + l);
+				l += dLines;
+				break;
+			case INSERT:
+				o += calculateRegionLength(lines, 1, o + l);
+				System.out.print(dLines + (isChange ? " CHANGE" : " INSERTION"));
+				isChange = false;
+				System.out.println((dLines > 1 ? "S starting" : "") + " on line " + (l + o + 1) + ":");
+				for (int i = 0; i < diff.text.length() / 3; ++i) {
+					System.out.println(" " + (l + o + 1) + ": " + linesWithoutRegions[l]);
+					++l;
+					o += calculateRegionLength(lines, 1, o + l);
+				}
+				hasChanged = true;
+				break;
+			}
+		}
+		return hasChanged;
+	}
+
+	// Take it from https://github.com/google/diff-match-patch/wiki/Line-or-Word-Diffs
+	public List<Diff> lineDiffs (String text1, String text2) {
+		diff_match_patch dmp = new diff_match_patch();
+		diff_match_patch.LinesToCharsResult a = dmp.diff_linesToChars(text1, text2); //Split two texts into a list of strings
+		String lineText1 = a.chars1;
+		String lineText2 = a.chars2;
+		List<String> lineArray = a.lineArray;
+		/*
+		 * - Find the differences between two texts.
+		 * - By comparing character by character but each character is the whole lines
+		 */
+		List<Diff> diffs = dmp.diff_main(lineText1, lineText2, false); 
+		dmp.diff_charsToLines(diffs, lineArray); //Rehydrate the text in a diff from a string of line hashes to real lines of text.
+
+		return diffs;
+	}
+	
+	public static int calculateRegionLength (List<String> lines, int numCheck, int startFrom) {
+		int o = 0;
+		boolean inRegion = false;
+		int numChecked = 0;
+		for (int i = startFrom; i < lines.size() && numChecked < numCheck; ++i) {
+			if (!inRegion && OutputBuffer.isRegionStart(lines.get(i))) {
+                inRegion = true;
+			    ++i;
+			    ++o;
+		    }
+			if (inRegion) {
+				++o;
+				inRegion = !OutputBuffer.isRegionEnd(lines.get(i));
+			} else
+				++numChecked;
+		}
+		return o;
+	}
+	
+	public static String makeHashDoc (String hashLine) {
+		return String.join("\n", hashLine.split("(?<=\\G...)"));
+	}
+    // -------------------------- Until here
+	
+	public List<Synchronization> getAllTheSyncsRegionsOfTheFolder(String folder) {
+		// create data structure for all files's names and contents in the folder
+		Map<String, String> namesAndContents = getFolderFileNamesAndContents(folder);
+		List<Synchronization> allTheSyncRegionsInTheFolder = new ArrayList<Synchronization>();
+
+		for (String file : namesAndContents.keySet()) {
+			FileSync fileSync = new FileSync(file);
+			List<Synchronization> syncRegionsOfThisFile = fileSync.getAllTheSyncRegionsOfTheFile();
+			if (syncRegionsOfThisFile == null) {
+				return null;
+			}
+			allTheSyncRegionsInTheFolder.addAll(syncRegionsOfThisFile);
 		}
 		return allTheSyncRegionsInTheFolder;
 	}
@@ -131,10 +263,10 @@ public class FolderSync {
 				if (values.size() == 1) {
 					// Case 1-a:
 					if ((valueOfAttributeInTheModel.toString()).equals(values.get(0))) {
-//						System.out.println("size 1, same value in the model: " + valueOfAttributeInTheModel);
+						System.out.println("size 1, same value in the model: " + valueOfAttributeInTheModel);
 					// Case 1-a:
 					} else {
-//						System.out.println("size 1, but differnt value from the one that in the model: " + valueOfAttributeInTheModel);
+						System.out.println("size 1, but differnt value from the one that in the model: " + valueOfAttributeInTheModel);
 
 						DataTypes.getModelValue(model, id, attribute, type, values, 0);
 
@@ -143,23 +275,23 @@ public class FolderSync {
 				} else if (values.size() == 2) {
 					// Case 2-a:
 					if ((valueOfAttributeInTheModel.toString()).equals(values.get(0)) && !(valueOfAttributeInTheModel.toString()).equals(values.get(1))) {
-//						System.out.println("Size 2, two different values but one of them same the one that in the model: " + valueOfAttributeInTheModel);
+						System.out.println("Size 2, two different values but one of them same the one that in the model: " + valueOfAttributeInTheModel);
 
 						DataTypes.getModelValue(model, id, attribute, type, values, 1);
 
 					// Case 2-b:
 					} else if ((valueOfAttributeInTheModel.toString()).equals(values.get(1)) && !(valueOfAttributeInTheModel.toString()).equals(values.get(0))) {
-//						System.out.println("Size 2, two different values but one of them same the one that in the model : " + valueOfAttributeInTheModel);
+						System.out.println("Size 2, two different values but one of them same the one that in the model : " + valueOfAttributeInTheModel);
 
 						DataTypes.getModelValue(model, id, attribute, type, values, 0);
 					// Case 3:
 					} else {
-//						System.err.println("Size 2, two different values from the one in the model.");
+						System.err.println("Size 2, two different values from the one in the model.");
 						System.exit(0);
 					}
 
 				} else {
-//					System.err.println("Sorry! two or more different values from the one in the model.");
+					System.err.println("Sorry! two or more different values from the one in the model.");
 					System.exit(0);
 				}
 			} catch (EolRuntimeException e1) {
@@ -218,6 +350,11 @@ public class FolderSync {
 	}
 
 	public String getSynchronization(String folder, IModel model) {
+		if (checkFolderForChanges2(folder)) {
+			System.err.println("\n Sorry, the content of at least one file has been changed or modified!!");
+			System.exit(0);
+			return "";
+		}
 
 		List<Synchronization> allTheSyncRegionsInTheFolder = new ArrayList<Synchronization>();
 
@@ -227,6 +364,7 @@ public class FolderSync {
 			return "Misformated or incompleted";
 		String result = updateTheModel(model, allTheSyncRegionsInTheFolder);
 		return result;
+		
 	}
 
 }

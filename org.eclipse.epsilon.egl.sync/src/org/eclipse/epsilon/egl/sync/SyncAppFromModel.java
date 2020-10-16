@@ -19,11 +19,15 @@ import org.eclipse.epsilon.eol.models.IModel;
 import org.junit.Test;
 
 public class SyncAppFromModel {
+	
+	// for the university-last project - just to test
+	private static final String FOLDER_PATH = System.getProperty("user.dir") + "/University-Last-Project/gen";
+
 	/*
 	 * This path works fine, but I need to check why it only works with adding Test1 at the end. 
 	 */
 
-	private static final String FOLDER_PATH = System.getProperty("user.dir") + "/SyncTests/GeneratedFilesFromUniversity/Test1";
+//	private static final String FOLDER_PATH = System.getProperty("user.dir") + "/SyncTests/GeneratedFilesFromUniversity/Test1";
 
 	
 	/*
@@ -40,10 +44,15 @@ public class SyncAppFromModel {
 
 		EmfModel model = new EmfModel();
 		model.setName("M");
-		// for the university
-		model.setMetamodelFile(new File("SyncTests/Model-University/University.ecore").getAbsolutePath());
-		model.setModelFile(new File("SyncTests/Model-University/University.model").getAbsolutePath());	
 		
+		// for the university-last project - just to test
+		model.setMetamodelFile(new File("University-Last-Project/University.ecore").getAbsolutePath());
+		model.setModelFile(new File("University-Last-Project/University.model").getAbsolutePath());	
+		
+//		// for the university
+//		model.setMetamodelFile(new File("SyncTests/Model-University/University.ecore").getAbsolutePath());
+//		model.setModelFile(new File("SyncTests/Model-University/University.model").getAbsolutePath());	
+//		
 		
 		// Last time I commented this path for the boiler to run the University example.
 		// for the boiler test in other workspace
