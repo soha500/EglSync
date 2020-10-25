@@ -23,7 +23,6 @@ import org.eclipse.epsilon.eol.execute.introspection.IPropertySetter;
 import org.eclipse.epsilon.eol.models.IModel;
 
 import org.eclipse.epsilon.egl.output.OutputBuffer;
-import org.eclipse.epsilon.egl.sync.diff_match_patch;
 import org.eclipse.epsilon.egl.sync.diff_match_patch.Diff;
 import org.eclipse.epsilon.egl.sync.diff_match_patch.Operation;
 
@@ -64,7 +63,7 @@ public class FolderSync {
 	}
 
 	// To check if any change happened outside the regions..
-	public boolean areChangesOutsideRegions2(String fileContent) {
+	public static boolean areChangesOutsideRegions2(String fileContent) {
 		String hashLine;
 		List<String> lines;
 		// looking for the last two lines and remove them
@@ -72,8 +71,8 @@ public class FolderSync {
 			String[] linesArr = fileContent.split("\n");
 			hashLine = linesArr[linesArr.length - 1].substring(2);
 			lines = new ArrayList<String>(Arrays.asList(linesArr));
-			lines.remove(lines.size() - 1); // hashes
-			lines.remove(lines.size() - 1); // comment
+			lines.remove(lines.size() - 1); // remove hashes first
+			lines.remove(lines.size() - 1); // remove comment second
 		}
 
 		String recreatedContent = String.join("\n", lines); // take all lines without the last two lines
@@ -109,6 +108,7 @@ public class FolderSync {
 			switch (diff.operation) {
 			case DELETE:
 				o += calculateRegionLength(lines, dLines, o + l);
+				if (diff.text == OutputBuffer.makeHashLine("(a protected region)")) break; // Be silent if it was a deletion of our marker
 				System.out.println(dLines + " DELETION" + (dLines > 1 ? "S starting" : "") + " on line " + (l + o + 1) + "."); 
 				hasChanged = true;
 				break;
@@ -134,8 +134,9 @@ public class FolderSync {
 	}
 
 	// Take it from https://github.com/google/diff-match-patch/wiki/Line-or-Word-Diffs
-	public List<Diff> lineDiffs (String text1, String text2) {
+	public static List<Diff> lineDiffs (String text1, String text2) {
 		diff_match_patch dmp = new diff_match_patch();
+		// diff_linesToChars() -- each line is represented by a single Unicode character
 		diff_match_patch.LinesToCharsResult a = dmp.diff_linesToChars(text1, text2); //Split two texts into a list of strings
 		String lineText1 = a.chars1;
 		String lineText2 = a.chars2;
@@ -145,7 +146,8 @@ public class FolderSync {
 		 * - By comparing character by character but each character is the whole lines
 		 */
 		List<Diff> diffs = dmp.diff_main(lineText1, lineText2, false); 
-		dmp.diff_charsToLines(diffs, lineArray); //Rehydrate the text in a diff from a string of line hashes to real lines of text.
+		// diff_charsToLines() -- to replace the Unicode characters with the original lines.
+		dmp.diff_charsToLines(diffs, lineArray); 
 
 		return diffs;
 	}
@@ -158,7 +160,7 @@ public class FolderSync {
 			if (!inRegion && OutputBuffer.isRegionStart(lines.get(i))) {
                 inRegion = true;
 			    ++i;
-			    ++o;
+			    //++o; //I used to do this but now a region has a length of one= (a protected region)
 		    }
 			if (inRegion) {
 				++o;
